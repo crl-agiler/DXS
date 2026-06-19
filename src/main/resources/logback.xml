@@ -1,0 +1,37 @@
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/dxs-dpu-pipeline.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/dxs-dpu-pipeline.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- DPU pipeline — DEBUG in dev, INFO in production -->
+    <logger name="eu.unicredit.dpu" level="DEBUG"/>
+
+    <!-- Flink internals — INFO to reduce noise -->
+    <logger name="org.apache.flink" level="INFO"/>
+
+    <!-- Kafka client — WARN to suppress poll loop noise -->
+    <logger name="org.apache.kafka" level="WARN"/>
+
+    <!-- Confluent Schema Registry client -->
+    <logger name="io.confluent" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

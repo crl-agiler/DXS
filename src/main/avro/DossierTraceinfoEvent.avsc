@@ -1,0 +1,160 @@
+{
+  "type": "record",
+  "name": "DossierTraceinfoEvent",
+  "namespace": "eu.unicredit.dxs",
+  "doc": "Full snapshot of a DXS Dossier, produced on every DocumentGroup status change. Contains uuid, eventType and eventTimestamp as technical fields added by DXS on top of the business payload.",
+  "fields": [
+
+    { "name": "uuid",           "type": "string",  "doc": "Unique event identifier — used as idempotency key on the Iceberg upsert." },
+    { "name": "eventType",      "type": "string",  "doc": "Event type at Dossier level: INSERT or UPDATE. Not set on nested entities." },
+    {
+      "name": "eventTimestamp",
+      "type": { "type": "long", "logicalType": "timestamp-millis" },
+      "doc": "Technical timestamp assigned by the CDC producer before publishing to Kafka. Used as event-time source for Flink WatermarkStrategy."
+    },
+
+    { "name": "dossierId",            "type": "long" },
+    { "name": "applicationCode",      "type": "string" },
+    { "name": "selectedProcessType",  "type": "string" },
+    { "name": "reprint",              "type": "string" },
+    { "name": "exeApp",               "type": "string" },
+    { "name": "correlationKey",       "type": "string" },
+    { "name": "author",               "type": "string" },
+    { "name": "status",               "type": "string" },
+    { "name": "subStatus",            "type": ["null", "string"], "default": null },
+    { "name": "branch",               "type": "string" },
+    { "name": "paperReason",          "type": ["null", "string"], "default": null },
+    { "name": "practiceId",           "type": ["null", "string"], "default": null },
+    { "name": "pecFlow",              "type": ["null", "string"], "default": null },
+    { "name": "bankCode",             "type": "string" },
+    { "name": "relatedDossier",       "type": ["null", "string"], "default": null },
+    { "name": "masterDossierId",      "type": ["null", "string"], "default": null },
+    { "name": "motivation",           "type": ["null", "string"], "default": null },
+    { "name": "dosierType",           "type": "string", "doc": "Note: one 's' — as per DXS Avro schema v2. Correct spelling should be dossierType — pending fix from DXS." },
+    { "name": "referenceBranchPec",   "type": ["null", "string"], "default": null },
+    { "name": "legalEntity",          "type": ["null", "string"], "default": null },
+    { "name": "flowType",             "type": ["null", "string"], "default": null },
+    {
+      "name": "creationDate",
+      "type": { "type": "long", "logicalType": "timestamp-millis" }
+    },
+    {
+      "name": "endDate",
+      "type": { "type": "long", "logicalType": "timestamp-millis" }
+    },
+
+    {
+      "name": "customers",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Customer",
+          "fields": [
+            { "name": "ndg",              "type": "string" },
+            { "name": "type",             "type": "string" },
+            { "name": "selectedChannels", "type": "string" }
+          ]
+        }
+      },
+      "default": []
+    },
+
+    {
+      "name": "documentGroups",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "DocumentGroup",
+          "fields": [
+            { "name": "id",          "type": "long" },
+            { "name": "digilayerId", "type": ["null", "string"], "default": null },
+            { "name": "envelopeId",  "type": ["null", "string"], "default": null, "doc": "Typo fixed from enevlopeId in v1." },
+            { "name": "status",      "type": "string" },
+            {
+              "name": "creationDate",
+              "type": { "type": "long", "logicalType": "timestamp-millis" }
+            },
+            {
+              "name": "endDate",
+              "type": { "type": "long", "logicalType": "timestamp-millis" }
+            },
+
+            {
+              "name": "signers",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Signer",
+                  "fields": [
+                    { "name": "ndg",              "type": "string" },
+                    { "name": "mfaMethod",        "type": ["null", "string"], "default": null },
+                    { "name": "authenticationId", "type": ["null", "string"], "default": null },
+                    { "name": "signerReb",        "type": ["null", "string"], "default": null },
+                    { "name": "signatureChannel", "type": ["null", "string"], "default": null },
+                    {
+                      "name": "signatureDate",
+                      "type": { "type": "long", "logicalType": "timestamp-millis" }
+                    }
+                  ]
+                }
+              },
+              "default": []
+            },
+
+            {
+              "name": "documents",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Document",
+                  "fields": [
+                    { "name": "id",                       "type": "long" },
+                    { "name": "code",                     "type": "string" },
+                    { "name": "status",                   "type": "string" },
+                    { "name": "categoryCode",             "type": "string" },
+                    { "name": "productName",              "type": "string" },
+                    { "name": "processCode",              "type": "string" },
+                    { "name": "processType",              "type": ["null", "string"], "default": null },
+                    { "name": "size",                     "type": ["null", "long"],   "default": null },
+                    { "name": "controlsOutcomePec",       "type": ["null", "string"], "default": null },
+                    { "name": "signatureTypePec",         "type": ["null", "string"], "default": null },
+                    { "name": "certificateAuthorityPec",  "type": ["null", "string"], "default": null },
+                    { "name": "signaturePointTimestampPec","type": ["null", "string"],"default": null },
+                    { "name": "accessibility",            "type": ["null", "string"], "default": null },
+                    { "name": "archiveLink",              "type": ["null", "string"], "default": null },
+                    { "name": "numberOfPages",            "type": ["null", "long"],   "default": null },
+                    { "name": "accountNumber",            "type": ["null", "string"], "default": null },
+                    { "name": "documentDescription",      "type": ["null", "string"], "default": null },
+                    { "name": "signatureType",            "type": ["null", "string"], "default": null },
+                    { "name": "digitalization",           "type": ["null", "string"], "default": null },
+                    { "name": "datamatrix",               "type": ["null", "string"], "default": null },
+                    {
+                      "name": "creationDate",
+                      "type": { "type": "long", "logicalType": "timestamp-millis" }
+                    },
+                    {
+                      "name": "endDate",
+                      "type": { "type": "long", "logicalType": "timestamp-millis" }
+                    },
+                    {
+                      "name": "signatureDate",
+                      "type": { "type": "long", "logicalType": "timestamp-millis" }
+                    }
+                  ]
+                }
+              },
+              "default": []
+            }
+
+          ]
+        }
+      },
+      "default": []
+    }
+
+  ]
+}

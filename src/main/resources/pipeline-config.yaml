@@ -1,0 +1,119 @@
+# ──────────────────────────────────────────────────────────────────
+# DXS DPU Pipeline — Configuration
+# Activate the right profile via: --env sit | uat | ppd | prd
+# ──────────────────────────────────────────────────────────────────
+
+# Active environment — override at runtime with env var PIPELINE_ENV
+environment: sit
+
+# ──────────────────────────────────────────────────────────────────
+# ENVIRONMENT PROFILES
+# ──────────────────────────────────────────────────────────────────
+environments:
+
+  sit:
+    kafka:
+      bootstrapServers: "ckfdevlsr01.internal.unicreditgroup.eu:9092"
+      topic: "DXSUIWWDPUSIT"
+      consumerGroupId: "DXS01DXSUIWWDPUSIT"
+      ldapGroup: "JUIDXSDPU_CKFDR"
+      partitions: 3
+      autoOffsetReset: "earliest"
+      sessionTimeoutMs: 30000
+      heartbeatIntervalMs: 10000
+      maxPollRecords: 500
+      securityProtocol: "SASL_SSL"
+      saslMechanism: "SCRAM-SHA-512"
+      # Credentials injected at runtime via env vars:
+      #   KAFKA_USERNAME, KAFKA_PASSWORD
+    schemaRegistry:
+      url: "http://ckfdevlsr01.internal.unicreditgroup.eu:8081"
+      # Credentials injected at runtime via env vars:
+      #   SCHEMA_REGISTRY_USERNAME, SCHEMA_REGISTRY_PASSWORD
+    flink:
+      parallelism: 3
+      checkpointIntervalMs: 30000
+      checkpointTimeoutMs: 60000
+      minPauseBetweenCheckpointsMs: 10000
+      stateBackend: "rocksdb"
+      checkpointDir: "gs://dpu-dxs-sit/checkpoints"
+
+  uat:
+    kafka:
+      bootstrapServers: "ckfqalsr01.internal.unicreditgroup.eu:9092,ckfqalsr02.internal.unicreditgroup.eu:9092"
+      topic: "DXSUIWWDPUUAT"
+      consumerGroupId: "DXS01DXSUIWWDPUUAT"
+      ldapGroup: "JUIDXSDPU_CKFQR"
+      partitions: 3
+      autoOffsetReset: "earliest"
+      sessionTimeoutMs: 30000
+      heartbeatIntervalMs: 10000
+      maxPollRecords: 500
+      securityProtocol: "SASL_SSL"
+      saslMechanism: "SCRAM-SHA-512"
+    schemaRegistry:
+      url: "http://ckfqalsr01.internal.unicreditgroup.eu:8081"
+    flink:
+      parallelism: 3
+      checkpointIntervalMs: 30000
+      checkpointTimeoutMs: 60000
+      minPauseBetweenCheckpointsMs: 10000
+      stateBackend: "rocksdb"
+      checkpointDir: "gs://dpu-dxs-uat/checkpoints"
+
+  ppd:
+    kafka:
+      bootstrapServers: "ckfqalsr01.internal.unicreditgroup.eu:9092,ckfqalsr02.internal.unicreditgroup.eu:9092"
+      topic: "DXSUIWWDPUPPD"
+      consumerGroupId: "DXS01DXSUIWWDPUPPD"
+      ldapGroup: "JUIDXSDPU_CKFQR"
+      partitions: 3
+      autoOffsetReset: "earliest"
+      sessionTimeoutMs: 30000
+      heartbeatIntervalMs: 10000
+      maxPollRecords: 500
+      securityProtocol: "SASL_SSL"
+      saslMechanism: "SCRAM-SHA-512"
+    schemaRegistry:
+      url: "http://ckfqalsr01.internal.unicreditgroup.eu:8081"
+    flink:
+      parallelism: 3
+      checkpointIntervalMs: 30000
+      checkpointTimeoutMs: 60000
+      minPauseBetweenCheckpointsMs: 10000
+      stateBackend: "rocksdb"
+      checkpointDir: "gs://dpu-dxs-ppd/checkpoints"
+
+  prd:
+    kafka:
+      bootstrapServers: "ckfprdlsr01.internal.unicreditgroup.eu:9092,ckfprdlsr02.internal.unicreditgroup.eu:9092"
+      topic: "DXSUIWWDPUPRD"
+      consumerGroupId: "DXS01DXSUIWWDPUPRD"
+      ldapGroup: "JUIDXSDPU_CKFPR"
+      partitions: 12
+      autoOffsetReset: "earliest"
+      sessionTimeoutMs: 45000
+      heartbeatIntervalMs: 15000
+      maxPollRecords: 1000
+      securityProtocol: "SASL_SSL"
+      saslMechanism: "SCRAM-SHA-512"
+    schemaRegistry:
+      url: "http://ckfprdlsr01.internal.unicreditgroup.eu:8081"
+    flink:
+      parallelism: 12
+      checkpointIntervalMs: 60000
+      checkpointTimeoutMs: 120000
+      minPauseBetweenCheckpointsMs: 20000
+      stateBackend: "rocksdb"
+      checkpointDir: "gs://dpu-dxs-prd/checkpoints"
+
+# ──────────────────────────────────────────────────────────────────
+# PIPELINE SETTINGS (environment-independent)
+# ──────────────────────────────────────────────────────────────────
+pipeline:
+  # Watermark out-of-orderness tolerance in ms
+  watermarkOutOfOrdernessMs: 30000
+  # CSV export time (used for delta filter)
+  csvExportTime: "07:30"
+  # DXS subject name in Schema Registry
+  schemaSubject: "DossierTraceinfoEvent"

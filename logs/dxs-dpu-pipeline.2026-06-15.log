@@ -1,0 +1,94 @@
+2026-06-15 19:40:08.550 [SessionTracker] INFO  o.a.zookeeper.server.ZooKeeperServer - Expiring session 0x100567a6cab0000, timeout of 30000ms exceeded
+2026-06-15 19:40:08.561 [main-SendThread(127.0.0.1:61539)] WARN  org.apache.zookeeper.ClientCnxn - Client session timed out, have not heard from server in 183385911ms for session id 0x100567a6cab0000
+2026-06-15 19:40:08.650 [controller-event-thread] INFO  kafka.controller.KafkaController - [Controller id=1] Processing automatic preferred replica leader election
+2026-06-15 19:40:08.658 [flink-pekko.actor.default-dispatcher-6] INFO  o.a.f.r.r.StandaloneResourceManager - The heartbeat of TaskManager with id 343ffee4-f59d-4c9d-9768-1b97203641b4 timed out.
+2026-06-15 19:40:08.655 [kafka-log-cleaner-thread-0] ERROR o.a.k.s.i.log.LogDirFailureChannel - Error while reading checkpoint file /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989/cleaner-offset-checkpoint
+java.nio.file.NoSuchFileException: /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989/cleaner-offset-checkpoint
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:116)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:219)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:371)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:422)
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420)
+	at java.base/java.nio.file.Files.newInputStream(Files.java:156)
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2839)
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2871)
+	at org.apache.kafka.server.common.CheckpointFile.read(CheckpointFile.java:92)
+	at org.apache.kafka.storage.internals.checkpoint.CheckpointFileWithFailureHandler.read(CheckpointFileWithFailureHandler.java:56)
+	at kafka.server.checkpoints.OffsetCheckpointFile.read(OffsetCheckpointFile.scala:75)
+	at kafka.log.LogCleanerManager.$anonfun$allCleanerCheckpoints$2(LogCleanerManager.scala:147)
+	at scala.collection.Iterator$$anon$10.nextCur(Iterator.scala:594)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:608)
+	at scala.collection.immutable.List.prependedAll(List.scala:152)
+	at scala.collection.immutable.List$.from(List.scala:684)
+	at scala.collection.immutable.List$.from(List.scala:681)
+	at scala.collection.IterableFactory$Delegate.from(Factory.scala:288)
+	at scala.collection.immutable.Iterable$.from(Iterable.scala:35)
+	at scala.collection.immutable.Iterable$.from(Iterable.scala:32)
+	at scala.collection.IterableFactory$Delegate.from(Factory.scala:288)
+	at scala.collection.IterableOps.flatMap(Iterable.scala:684)
+	at scala.collection.IterableOps.flatMap$(Iterable.scala:684)
+	at scala.collection.AbstractIterable.flatMap(Iterable.scala:933)
+	at kafka.log.LogCleanerManager.$anonfun$allCleanerCheckpoints$1(LogCleanerManager.scala:145)
+	at kafka.log.LogCleanerManager.allCleanerCheckpoints(LogCleanerManager.scala:153)
+	at kafka.log.LogCleanerManager.$anonfun$grabFilthiestCompactedLog$1(LogCleanerManager.scala:184)
+	at kafka.log.LogCleanerManager.grabFilthiestCompactedLog(LogCleanerManager.scala:181)
+	at kafka.log.LogCleaner$CleanerThread.cleanFilthiestLog(LogCleaner.scala:408)
+	at kafka.log.LogCleaner$CleanerThread.tryCleanFilthiestLog(LogCleaner.scala:395)
+	at kafka.log.LogCleaner$CleanerThread.doWork(LogCleaner.scala:381)
+	at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:130)
+2026-06-15 19:40:08.690 [main-SendThread(127.0.0.1:61539)] WARN  org.apache.zookeeper.ClientCnxn - Session 0x100567a6cab0000 for server /127.0.0.1:61539, Closing socket connection. Attempting reconnect except it is a SessionExpiredException.
+org.apache.zookeeper.ClientCnxn$SessionTimeoutException: Client session timed out, have not heard from server in 183385911ms for session id 0x100567a6cab0000
+	at org.apache.zookeeper.ClientCnxn$SendThread.run(ClientCnxn.java:1257)
+2026-06-15 19:40:08.694 [flink-pekko.actor.default-dispatcher-6] INFO  o.a.f.r.r.StandaloneResourceManager - Closing TaskExecutor connection 343ffee4-f59d-4c9d-9768-1b97203641b4 because: The heartbeat of TaskManager with id 343ffee4-f59d-4c9d-9768-1b97203641b4 timed out.
+2026-06-15 19:40:08.700 [kafka-log-cleaner-thread-0] ERROR kafka.log.LogCleaner - Failed to access checkpoint file cleaner-offset-checkpoint in dir /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989
+org.apache.kafka.common.errors.KafkaStorageException: Error while reading checkpoint file /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989/cleaner-offset-checkpoint
+Caused by: java.nio.file.NoSuchFileException: /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989/cleaner-offset-checkpoint
+	at java.base/sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+	at java.base/sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:116)
+	at java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:219)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:371)
+	at java.base/java.nio.file.Files.newByteChannel(Files.java:422)
+	at java.base/java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:420)
+	at java.base/java.nio.file.Files.newInputStream(Files.java:156)
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2839)
+	at java.base/java.nio.file.Files.newBufferedReader(Files.java:2871)
+	at org.apache.kafka.server.common.CheckpointFile.read(CheckpointFile.java:92)
+	at org.apache.kafka.storage.internals.checkpoint.CheckpointFileWithFailureHandler.read(CheckpointFileWithFailureHandler.java:56)
+	at kafka.server.checkpoints.OffsetCheckpointFile.read(OffsetCheckpointFile.scala:75)
+	at kafka.log.LogCleanerManager.$anonfun$allCleanerCheckpoints$2(LogCleanerManager.scala:147)
+	at scala.collection.Iterator$$anon$10.nextCur(Iterator.scala:594)
+	at scala.collection.Iterator$$anon$10.hasNext(Iterator.scala:608)
+	at scala.collection.immutable.List.prependedAll(List.scala:152)
+	at scala.collection.immutable.List$.from(List.scala:684)
+	at scala.collection.immutable.List$.from(List.scala:681)
+	at scala.collection.IterableFactory$Delegate.from(Factory.scala:288)
+	at scala.collection.immutable.Iterable$.from(Iterable.scala:35)
+	at scala.collection.immutable.Iterable$.from(Iterable.scala:32)
+	at scala.collection.IterableFactory$Delegate.from(Factory.scala:288)
+	at scala.collection.IterableOps.flatMap(Iterable.scala:684)
+	at scala.collection.IterableOps.flatMap$(Iterable.scala:684)
+	at scala.collection.AbstractIterable.flatMap(Iterable.scala:933)
+	at kafka.log.LogCleanerManager.$anonfun$allCleanerCheckpoints$1(LogCleanerManager.scala:145)
+	at kafka.log.LogCleanerManager.allCleanerCheckpoints(LogCleanerManager.scala:153)
+	at kafka.log.LogCleanerManager.$anonfun$grabFilthiestCompactedLog$1(LogCleanerManager.scala:184)
+	at kafka.log.LogCleanerManager.grabFilthiestCompactedLog(LogCleanerManager.scala:181)
+	at kafka.log.LogCleaner$CleanerThread.cleanFilthiestLog(LogCleaner.scala:408)
+	at kafka.log.LogCleaner$CleanerThread.tryCleanFilthiestLog(LogCleaner.scala:395)
+	at kafka.log.LogCleaner$CleanerThread.doWork(LogCleaner.scala:381)
+	at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:130)
+2026-06-15 19:40:08.701 [LogDirFailureHandler] WARN  kafka.server.ReplicaManager - [ReplicaManager broker=1] Stopping serving replicas in dir /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989
+2026-06-15 19:40:08.708 [flink-pekko.actor.default-dispatcher-6] INFO  o.a.f.r.r.s.FineGrainedSlotManager - Unregistering task executor 5d867f374d8201ba420dcd0c25c72ff0 from the slot manager.
+2026-06-15 19:40:08.714 [LogDirFailureHandler] INFO  kafka.server.ReplicaFetcherManager - [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(DXSUIWWDPUSIT-2, DXSUIWWDPUSIT-0, DXSUIWWDPUSIT-1)
+2026-06-15 19:40:08.715 [LogDirFailureHandler] INFO  k.server.ReplicaAlterLogDirsManager - [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions Set(DXSUIWWDPUSIT-2, DXSUIWWDPUSIT-0, DXSUIWWDPUSIT-1)
+2026-06-15 19:40:08.715 [flink-pekko.actor.default-dispatcher-7] INFO  o.a.f.r.taskexecutor.TaskExecutor - Close ResourceManager connection 2ce4988410ac2924ba545e475d6cf840.
+2026-06-15 19:40:08.718 [flink-pekko.actor.default-dispatcher-7] INFO  o.a.f.r.taskexecutor.TaskExecutor - Connecting to ResourceManager pekko://flink/user/rpc/resourcemanager_1(a8f6374d9abb093237ca50c7f1e34826).
+2026-06-15 19:40:08.721 [LogDirFailureHandler] WARN  kafka.server.ReplicaManager - [ReplicaManager broker=1] Broker 1 stopped fetcher for partitions DXSUIWWDPUSIT-2,DXSUIWWDPUSIT-0,DXSUIWWDPUSIT-1 and stopped moving logs for partitions  because they are in the failed log directory /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989.
+2026-06-15 19:40:08.722 [LogDirFailureHandler] WARN  kafka.log.LogManager - Stopping serving logs in dir /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989
+2026-06-15 19:40:08.723 [flink-pekko.actor.default-dispatcher-7] INFO  o.a.f.r.taskexecutor.TaskExecutor - Terminating registration attempts towards ResourceManager pekko://flink/user/rpc/resourcemanager_1.
+2026-06-15 19:40:08.725 [flink-pekko.actor.default-dispatcher-4] INFO  o.a.f.r.taskexecutor.TaskExecutor - Resolved ResourceManager address, beginning registration
+2026-06-15 19:40:08.729 [flink-pekko.actor.default-dispatcher-7] INFO  o.a.f.r.taskexecutor.TaskExecutor - Connecting to ResourceManager pekko://flink/user/rpc/resourcemanager_1(a8f6374d9abb093237ca50c7f1e34826).
+2026-06-15 19:40:08.730 [LogDirFailureHandler] ERROR kafka.log.LogManager - Shutdown broker because all log dirs in /var/folders/dw/4lwb0wn910vdf7d4_xgyyd1h0000gn/T/kafka-unit627316024095926989 have failed
+2026-06-15 19:40:08.736 [flink-pekko.actor.default-dispatcher-8] INFO  o.a.f.r.taskexecutor.TaskExecutor - Resolved ResourceManager address, beginning registration
