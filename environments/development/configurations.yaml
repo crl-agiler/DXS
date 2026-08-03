@@ -2,6 +2,6 @@ specific:
   job:
     args: [
       "bucketName=dxs_traceinfo_ew8_development",
-      "baseConfigPath=0/dxs-traceinfo-gcs-storage-area/dxs-traceinfo-flink-wl-streaming/0.0.8/distribution/configs/config.yaml",
-      "envConfigPath=0/dxs-traceinfo-gcs-storage-area/dxs-traceinfo-flink-wl-streaming/0.0.8/distribution/configs/development/config.yaml"
+      "baseConfigPath=0/dxs-traceinfo-gcs-storage-area/dxs-traceinfo-flink-streaming-wl/0.0.8/distribution/configs/config.yaml",
+      "envConfigPath=0/dxs-traceinfo-gcs-storage-area/dxs-traceinfo-flink-streaming-wl/0.0.8/distribution/configs/development/config.yaml"
     ]
