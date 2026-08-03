@@ -1,0 +1,17 @@
+site_name: 'Flink Job Template'
+site_description: 'To create a workflow template using Flink'
+
+nav:
+  - Introduction: index.md
+  - Flink Job Lifecycle: flink_lifecycle.md
+  - Repository Structure: repository_structure.md
+  - Descriptor (catalog-info.yaml): descriptor.md
+  - Savepoints behavior: savepoints_behaviour.md
+  - Examples: examples.md
+  - Tips: tips.md
+  - Glossary: glossary.md
+  - External links: external_links.md
+  - Input Source: input_source.md
+
+plugins:
+  - techdocs-core

@@ -1,0 +1,69 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: training.dxs_traceinfo.0.dxs-traceinfo-flink-streaming-wl
+  description: Flink Workload for DXS Traceinfo
+  annotations:
+    bitbucket.org/project-slug: DPU/mesh_dxs-traceinfo-flink-streaming-wl
+    backstage.io/techdocs-ref: dir:.
+  links:
+    - url: https://console.cloud.google.com/dataproc/clusters
+  title: DataProc Workload For Flink Jobs
+  icon: cloud
+  tags:
+    - gcp
+    - dataproc
+    - workload
+    - flink
+spec:
+  type: workload
+  lifecycle: experimental
+  owner: user:ionutvalentin.besoiu_unicredit.eu
+  system: system:documental.dxs_traceinfo.0
+  domain: domain:documental
+  mesh:
+    name: dxs-traceinfo-flink-streaming-wl
+    fullyQualifiedName: dxs-traceinfo-flink-streaming-wl
+    description: Flink Workload for DXS Traceinfo
+    kind: workload
+    version: 0.0.8
+    infrastructureTemplateId: urn:dmb:itm:dataproc-specific-provisioner:1.0.0
+    useCaseTemplateId: urn:dmb:utm:gcp-workload-dataproc-flink-template:0.0.0
+    dependsOn:
+      - urn:dmb:cmp:documental:dxs_traceinfo:0:dxs-traceinfo-flink-cluster
+    platform: DataProc
+    technology: flink
+    workloadType: FULL
+    connectionType: HouseKeeping
+    readsFrom: [ ]
+    specific:
+      artifact:
+        name: dxs-traceinfo-flink-streaming-wl
+        version: 0.0.8
+      job:
+        type: FLINK
+        mainClass: eu.unicredit.App
+        args: [ ]
+        configFiles: [ ]
+        savepointsPath: auto
+        submitType: APPLICATION
+      clusterId: urn:dmb:cmp:training:dxs_traceinfo:0:dxs-traceinfo-flink-cluster
+  instanceOf: componenttype:default/workload
+witboost:
+  parameters:
+    readsFromEntities: [ ]
+    sources:
+      - { }
+    name: dxs-traceinfo-flink-streaming-wl
+    domain: domain:training
+    dataproduct: system:training.dxs_traceinfo.0
+    parentRef: system:training.dxs_traceinfo.0
+    templateRef: template:default/gcp-workload-flink-template.1
+    identifier: training.dxs_traceinfo.0.dxs-traceinfo-flink-streaming-wl
+    dataproductOwnerGroup: user:cannicchiarico.external_unicredit.eu
+    description: Flink Workload for DXS Traceinfo
+    flinkClusterComponentId: component:training.dxs_traceinfo.0.dxs-traceinfo-flink-cluster
+    workloadType: FULL
+    connectionType: HouseKeeping
+    useCaseTemplateID: template:default/gcp-workload-flink-template.1
+    creationDate: 2026-06-10T15:44:34.843Z

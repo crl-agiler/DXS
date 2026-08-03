@@ -1,0 +1,9 @@
+build:
+  tool:
+    maven:
+      phase: package
+      pomPath: flink-app/pom.xml
+
+publishArtifact:
+  artifact: flink-app/target/dxs-traceinfo-flink-streaming-wl-${POM_VERSION}-jar-with-dependencies.jar
+  release: true

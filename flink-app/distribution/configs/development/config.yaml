@@ -1,0 +1,15 @@
+kafka:
+  bootstrapServers: ckfdevlsr01.internal.unicreditgroup.eu:9092
+  topic: DXSUIWWDPUSIT
+  consumerGroupId: DXS01DXSUIWWDPUSIT
+  ldapGroup: JUIDXSDPU_CKFDR
+  partitions: 3
+
+schemaRegistry:
+  url: http://ckfdevlsr01.internal.unicreditgroup.eu:8081
+
+flink:
+  parallelism: 3
+
+catalog:
+  catalogLocation: 'gs://dxs_traceinfo_ew8_development/0/dxs-traceinfo-dremio-storage-area'

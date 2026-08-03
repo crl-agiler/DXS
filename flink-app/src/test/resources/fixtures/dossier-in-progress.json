@@ -1,0 +1,98 @@
+{
+  "uuid": "uuid-3",
+  "eventType": "DOSSIER",
+  "eventTimestamp": 1735725600000,
+  "dossierId": 102,
+  "applicationCode": "APP",
+  "selectedProcessType": "DIGITAL",
+  "reprint": "N",
+  "exeApp": "EXE",
+  "correlationKey": "CORR-003",
+  "author": "AUTHOR",
+  "status": "CREATED",
+  "subStatus": {
+    "string": "PROCESSING"
+  },
+  "branch": "BRANCH01",
+  "paperReason": {
+    "string": "PAPER"
+  },
+  "practiceId": {
+    "string": "CASE003"
+  },
+  "pecFlow": {
+    "string": "PEC"
+  },
+  "bankCode": "02008",
+  "relatedDossier": {
+    "string": "REL003"
+  },
+  "masterDossierId": {
+    "string": "0003"
+  },
+  "motivation": {
+    "string": "IN_PROGRESS"
+  },
+  "dossierType": "STANDARD",
+  "referenceBranchPec": {
+    "string": "PEC_BRANCH"
+  },
+  "legalEntity": {
+    "string": "UC"
+  },
+  "flowType": {
+    "string": "FLOW"
+  },
+  "creationDate": 1735725600000,
+  "endDate": 1735725600000,
+  "customers": [
+    {
+      "ndg": "777777",
+      "type": "PF",
+      "selectedChannels": "MOBILE"
+    }
+  ],
+  "documentGroups": [
+    {
+      "id": 202,
+      "digilayerId": {
+        "string": "DIGI003"
+      },
+      "envelopeId": {
+        "string": "ENV003"
+      },
+      "status": "CREATED",
+      "creationDate": 1735725600000,
+      "endDate": 1735725600000,
+      "signers": [],
+      "documents": [
+        {
+          "id": 302,
+          "code": "DOC03",
+          "status": "CREATED",
+          "categoryCode": "CAT",
+          "productName": "PRODUCT",
+          "processCode": "PROC",
+          "processType": null,
+          "size": null,
+          "controlsOutcomePec": null,
+          "signatureTypePec": null,
+          "certificateAuthorityPec": null,
+          "signaturePointTimestampPec": null,
+          "accessibility": null,
+          "archiveLink": null,
+          "numberOfPages": null,
+          "accountNumber": null,
+          "documentDescription": null,
+          "signatureType": null,
+          "digitalization": null,
+          "datamatrix": null,
+          "signatureBoxOrder": null,
+          "creationDate": 1735725600000,
+          "endDate": 1735725600000,
+          "signatureDate": 1735725600000
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+podSettings:
+  mavenImage:
+    name: jxp/agent/maven
+    version: 3.8.6-openjdk-18

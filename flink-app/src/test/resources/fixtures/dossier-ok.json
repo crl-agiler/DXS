@@ -1,0 +1,146 @@
+{
+  "uuid": "uuid-1",
+  "eventType": "DOSSIER",
+  "eventTimestamp": 1735725600000,
+  "dossierId": 100,
+  "applicationCode": "APP",
+  "selectedProcessType": "DIGITAL",
+  "reprint": "N",
+  "exeApp": "EXE",
+  "correlationKey": "CORR-001",
+  "author": "AUTHOR",
+  "status": "CONCLUDED",
+  "subStatus": {
+    "string": "SIGNED"
+  },
+  "branch": "BRANCH01",
+  "paperReason": {
+    "string": "PAPER"
+  },
+  "practiceId": {
+    "string": "CASE001"
+  },
+  "pecFlow": {
+    "string": "PEC"
+  },
+  "bankCode": "02008",
+  "relatedDossier": {
+    "string": "REL001"
+  },
+  "masterDossierId": {
+    "string": "0001"
+  },
+  "motivation": {
+    "string": "OK"
+  },
+  "dossierType": "STANDARD",
+  "referenceBranchPec": {
+    "string": "PEC_BRANCH"
+  },
+  "legalEntity": {
+    "string": "UC"
+  },
+  "flowType": {
+    "string": "FLOW"
+  },
+  "creationDate": 1735725600000,
+  "endDate": 1735725600000,
+  "customers": [
+    {
+      "ndg": "123456",
+      "type": "PF",
+      "selectedChannels": "WEB"
+    }
+  ],
+  "documentGroups": [
+    {
+      "id": 200,
+      "digilayerId": {
+        "string": "DIGI001"
+      },
+      "envelopeId": {
+        "string": "ENV001"
+      },
+      "status": "ARCHIVED",
+      "creationDate": 1735725600000,
+      "endDate": 1735725600000,
+      "signers": [
+        {
+          "id": 10,
+          "ndg": "123456",
+          "mfaMethod": {
+            "string": "OTP"
+          },
+          "authenticationId": {
+            "string": "AUTH001"
+          },
+          "signerReb": {
+            "string": "100"
+          },
+          "signatureChannel": {
+            "string": "WEB"
+          },
+          "signatureDate": 1735725600000
+        }
+      ],
+      "documents": [
+        {
+          "id": 300,
+          "code": "DOC01",
+          "status": "ARCHIVED",
+          "categoryCode": "CAT",
+          "productName": "PRODUCT",
+          "processCode": "PROC",
+          "processType": {
+            "string": "DIGITAL"
+          },
+          "size": {
+            "long": 1000
+          },
+          "controlsOutcomePec": {
+            "string": "OK"
+          },
+          "signatureTypePec": {
+            "string": "PADES"
+          },
+          "certificateAuthorityPec": {
+            "string": "CA"
+          },
+          "signaturePointTimestampPec": {
+            "string": "TS"
+          },
+          "accessibility": {
+            "string": "FULL"
+          },
+          "archiveLink": {
+            "string": "LINK"
+          },
+          "numberOfPages": {
+            "long": 10
+          },
+          "accountNumber": {
+            "string": "ACC001"
+          },
+          "documentDescription": {
+            "string": "DESCRIPTION"
+          },
+          "signatureType": {
+            "string": "CADES"
+          },
+          "digitalization": {
+            "string": "YES"
+          },
+          "datamatrix": {
+            "string": "DM"
+          },
+          "signatureBoxOrder": {
+            "string": "1"
+          },
+          "creationDate": 1735725600000,
+          "endDate": 1735725600000,
+          "signatureDate": 1735725600000
+        }
+      ]
+    }
+  ]
+}

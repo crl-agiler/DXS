@@ -1,0 +1,18 @@
+kafka:
+  bootstrapServers: ckfqalsr01.internal.unicreditgroup.eu:9092,ckfqalsr02.internal.unicreditgroup.eu:9092
+  topic: DXSUIWWDPUUAT
+  consumerGroupId: DXS01DXSUIWWDPUUAT
+  ldapGroup: JUIDXSDPU_CKFQR
+  partitions: 3
+
+schemaRegistry:
+  url: http://ckfqalsr01.internal.unicreditgroup.eu:8081
+
+flink:
+  parallelism: 3
+  checkpointIntervalMs: 60000
+  checkpointTimeoutMs: 120000
+  minPauseBetweenCheckpointsMs: 20000
+
+catalog:
+  catalogLocation: 'gs://dxs_traceinfo_ew8_quality/0/dxs-traceinfo-dremio-storage-area'

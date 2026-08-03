@@ -1,0 +1,38 @@
+# THIS IS THE BASE CONFIG. ENVIRONMENT CONFIGS WILL BE MERGED TO THIS.
+# - ARRAYS with elements containing "name" field will be merged like this:
+#   For each child array element, select the corresponding parent array element by "name",
+#   and merge them (child overwrite parent). If not matched, add child array element nonetheless.
+# - For any parent array that is also present in child, elements that are not present in child array are never selected.
+# - For any parent array that is not present in child, all parent array elements are always added.
+
+projectId: # ENVIRONMENT-SPECIFIC
+flink:
+  # vCPU x task managers x task slot per vCPU
+  baseParallelism: # ENVIRONMENT-SPECIFIC
+  checkpointInterval: "PT10M"
+
+## SOURCES
+schemaRegistry:
+  # FIXME: Update secrets and certificates with YFA specific ones.
+  url: # ENVIRONMENT-SPECIFIC
+  secretId: "sct-dpu-dxs-traceinfo-kafka-tu"
+  certDir: "/var/kafka_certificates"
+  secure: "true"
+kafka:
+  bootstrapServers: # ENVIRONMENT-SPECIFIC
+  certDir: "/var/kafka_certificates"
+  secure: "true"
+  startingOffset: "committed_or_earliest"
+  # https://datacater.io/blog/2023-02-21/kafka-consumer-producer-high-throughput.html
+  otherKafkaProperties:
+    max.partition.fetch.bytes: "10485880"
+    max.poll.records: "500"
+    fetch.min.bytes: "1"
+    fetch.max.wait.ms: "500"
+    request.timeout.ms: "120000"
+    default.api.timeout.ms: "120000"
+catalog:
+  catalogName: "hadoop"
+
+
+

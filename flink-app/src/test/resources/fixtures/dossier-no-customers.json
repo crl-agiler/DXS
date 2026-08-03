@@ -1,0 +1,65 @@
+{
+  "uuid": "uuid-4",
+  "eventType": "DOSSIER",
+  "eventTimestamp": 1735725600000,
+  "dossierId": 103,
+  "applicationCode": "APP",
+  "selectedProcessType": "DIGITAL",
+  "reprint": "N",
+  "exeApp": "EXE",
+  "correlationKey": "CORR-004",
+  "author": "AUTHOR",
+  "status": "CONCLUDED",
+  "subStatus": {
+    "string": "SIGNED"
+  },
+  "branch": "BRANCH01",
+  "paperReason": {
+    "string": "PAPER"
+  },
+  "practiceId": {
+    "string": "CASE004"
+  },
+  "pecFlow": {
+    "string": "PEC"
+  },
+  "bankCode": "02008",
+  "relatedDossier": {
+    "string": "REL004"
+  },
+  "masterDossierId": {
+    "string": "0004"
+  },
+  "motivation": {
+    "string": "OK"
+  },
+  "dossierType": "STANDARD",
+  "referenceBranchPec": {
+    "string": "PEC_BRANCH"
+  },
+  "legalEntity": {
+    "string": "UC"
+  },
+  "flowType": {
+    "string": "FLOW"
+  },
+  "creationDate": 1735725600000,
+  "endDate": 1735725600000,
+  "customers": [],
+  "documentGroups": [
+    {
+      "id": 203,
+      "digilayerId": {
+        "string": "DIGI004"
+      },
+      "envelopeId": {
+        "string": "ENV004"
+      },
+      "status": "ARCHIVED",
+      "creationDate": 1735725600000,
+      "endDate": 1735725600000,
+      "signers": [],
+      "documents": []
+    }
+  ]
+}

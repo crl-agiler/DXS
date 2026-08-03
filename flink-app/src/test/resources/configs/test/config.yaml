@@ -1,0 +1,28 @@
+projectId: "dxs-test"
+
+debugMode: false
+
+flink:
+  parallelism: 1
+  checkpointTimeout: "PT1M"
+  checkpointDir: "file:///tmp/checkpoints"
+  checkpointInterval: "PT0.005S"
+
+schemaRegistry:
+  url: "{{schemaRegistryUrl}}"
+  secretId: "dummy"
+
+kafka:
+  bootstrapServers: "{{kafkaBootstrapServers}}"
+  topic: "DXSUIWWDPUSIT"
+  consumerGroupId: "DXS01DXSUIWWDPUSIT"
+  certDir: "/tmp"
+  secure: false
+  startingOffset: "earliest"
+
+  otherKafkaProperties:
+    security.protocol: "PLAINTEXT"
+
+catalog:
+  catalogLocation: '{{catalogLocation}}'
+  catalogName: "hadoop"
