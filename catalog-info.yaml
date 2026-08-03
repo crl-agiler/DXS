@@ -47,7 +47,7 @@ spec:
         configFiles: [ ]
         savepointsPath: auto
         submitType: APPLICATION
-      clusterId: urn:dmb:cmp:training:dxs_traceinfo:0:dxs-traceinfo-flink-cluster
+      clusterId: urn:dmb:cmp:documental:dxs_traceinfo:0:dxs-traceinfo-flink-cluster
   instanceOf: componenttype:default/workload
 witboost:
   parameters:
@@ -62,7 +62,7 @@ witboost:
     identifier: training.dxs_traceinfo.0.dxs-traceinfo-flink-streaming-wl
     dataproductOwnerGroup: user:cannicchiarico.external_unicredit.eu
     description: Flink Workload for DXS Traceinfo
-    flinkClusterComponentId: component:training.dxs_traceinfo.0.dxs-traceinfo-flink-cluster
+    flinkClusterComponentId: component:documental.dxs_traceinfo.0.dxs-traceinfo-flink-cluster
     workloadType: FULL
     connectionType: HouseKeeping
     useCaseTemplateID: template:default/gcp-workload-flink-template.1
