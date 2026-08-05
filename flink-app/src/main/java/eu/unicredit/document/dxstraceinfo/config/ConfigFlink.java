@@ -37,10 +37,10 @@ public class ConfigFlink implements Serializable {
 
   @NotNull
   @Valid
-  @JsonProperty(value = "parallelism", required = true)
+  @JsonProperty(value = "baseParallelism", required = true)
   @JsonPropertyDescription(
       "Job parallelism. Should normally match the number of Kafka partitions.")
-  Integer parallelism;
+  Integer baseParallelism;
 
   @NotNull
   @Valid

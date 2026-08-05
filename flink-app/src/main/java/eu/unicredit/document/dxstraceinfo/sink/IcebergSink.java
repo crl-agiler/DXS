@@ -28,7 +28,7 @@ public final class IcebergSink {
           .tableLoader(context.getTableLoader())
           .upsert(true)
           .equalityFieldColumns(context.getEqualityField())
-          .writeParallelism(confFlink.getParallelism())
+          .writeParallelism(confFlink.getBaseParallelism())
           .uidPrefix(context.getOutputTag().getId())
           .append();
     }

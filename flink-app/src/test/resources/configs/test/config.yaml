@@ -3,7 +3,7 @@ projectId: "dxs-test"
 debugMode: false
 
 flink:
-  parallelism: 1
+  baseParallelism: 1
   checkpointTimeout: "PT1M"
   checkpointDir: "file:///tmp/checkpoints"
   checkpointInterval: "PT0.005S"

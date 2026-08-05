@@ -71,7 +71,7 @@ class IcebergSinkTest {
     FlinkSink.Builder documentBuilder =
         mock(FlinkSink.Builder.class);
 
-    when(configFlink.getParallelism())
+    when(configFlink.getBaseParallelism())
         .thenReturn(WRITE_PARALLELISM);
 
     when(dossierContext.getOutputTag())
@@ -145,7 +145,7 @@ class IcebergSinkTest {
         .getSideOutput(documentTag);
 
     verify(configFlink, times(2))
-        .getParallelism();
+        .getBaseParallelism();
   }
 
   @SuppressWarnings("unchecked")
@@ -176,7 +176,7 @@ class IcebergSinkTest {
     FlinkSink.Builder builder =
         mock(FlinkSink.Builder.class);
 
-    when(configFlink.getParallelism())
+    when(configFlink.getBaseParallelism())
         .thenReturn(WRITE_PARALLELISM);
 
     when(splitContext.getOutputTag())

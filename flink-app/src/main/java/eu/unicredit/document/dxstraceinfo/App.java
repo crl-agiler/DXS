@@ -144,7 +144,7 @@ public class App {
 
     env.setParallelism(
         appConfig.getFlinkConfig()
-            .getParallelism());
+            .getBaseParallelism());
 
     env.getConfig()
         .enableObjectReuse();
