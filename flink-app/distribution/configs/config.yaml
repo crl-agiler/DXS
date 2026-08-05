@@ -15,7 +15,7 @@ flink:
 schemaRegistry:
   # FIXME: Update secrets and certificates with YFA specific ones.
   url: # ENVIRONMENT-SPECIFIC
-  secretId: "sct-dxs-traceinfo-kafka-tu"
+  secretId: "sct-dxs_traceinfo-kafka-tu"
   certDir: "/var/kafka_certificates"
   secure: "true"
 kafka:
