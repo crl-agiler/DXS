@@ -1,3 +1,5 @@
+projectId: "prj-dpu-prd-dataplatform-001"
+
 kafka:
   bootstrapServers: ckfprdlsr01.internal.unicreditgroup.eu:9092,ckfprdlsr02.internal.unicreditgroup.eu:9092
   topic: DXSUIWWDPUPRD
@@ -9,7 +11,8 @@ schemaRegistry:
   url: http://ckfprdlsr01.internal.unicreditgroup.eu:8081
 
 flink:
-  parallelism: 12
+  baseParallelism: 12
+  checkpointInterval: "PT2H"
   checkpointIntervalMs: 60000
   checkpointTimeoutMs: 120000
   minPauseBetweenCheckpointsMs: 20000

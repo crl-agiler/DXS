@@ -1,3 +1,5 @@
+projectId: "prj-dpu-qat-dataplatform-001"
+
 kafka:
   bootstrapServers: ckfqalsr01.internal.unicreditgroup.eu:9092,ckfqalsr02.internal.unicreditgroup.eu:9092
   topic: DXSUIWWDPUUAT
@@ -9,7 +11,8 @@ schemaRegistry:
   url: http://ckfqalsr01.internal.unicreditgroup.eu:8081
 
 flink:
-  parallelism: 3
+  baseParallelism: 3
+  checkpointInterval: "PT2H"
   checkpointIntervalMs: 60000
   checkpointTimeoutMs: 120000
   minPauseBetweenCheckpointsMs: 20000
