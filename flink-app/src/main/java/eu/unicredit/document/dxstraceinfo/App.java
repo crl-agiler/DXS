@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 @Builder(toBuilder = true)
 public class App {
 
-  public static final String APP_VERSION = "0.0.9";
+  public static final String APP_VERSION = "0.0.10";
   public static final String APP_MAJOR_VERSION =
       APP_VERSION.split("\\.")[0];
 
