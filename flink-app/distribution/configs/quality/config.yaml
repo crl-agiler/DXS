@@ -1,7 +1,7 @@
 projectId: "prj-dpu-qat-dataplatform-001"
 
 kafka:
-  bootstrapServers: ckfqalsr01.internal.unicreditgroup.eu:9092,ckfqalsr02.internal.unicreditgroup.eu:9092
+  bootstrapServers: ckfqalbrk01.internal.unicreditgroup.eu:9093,ckfqalbrk02.internal.unicreditgroup.eu:9093,ckfqalbrk03.internal.unicreditgroup.eu:9093,ckfqalbrk04.internal.unicreditgroup.eu:9093,ckfqalbrk05.internal.unicreditgroup.eu:9093,ckfqalbrk06.internal.unicreditgroup.eu:9093,ckfqalbrk07.internal.unicreditgroup.eu:9093,ckfqalbrk08.internal.unicreditgroup.eu:9093
   topic: DXSUIWWDPUUAT
   consumerGroupId: DXS01DXSUIWWDPUUAT
   ldapGroup: JUIDXSDPU_CKFQR

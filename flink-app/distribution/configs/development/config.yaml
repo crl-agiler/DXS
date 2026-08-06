@@ -1,7 +1,7 @@
 projectId: "prj-dpu-dev-dataplatform-001"
 
 kafka:
-  bootstrapServers: ckfdevlsr01.internal.unicreditgroup.eu:9092
+  bootstrapServers: ckfqalbrk01.internal.unicreditgroup.eu:9093,ckfqalbrk02.internal.unicreditgroup.eu:9093,ckfqalbrk03.internal.unicreditgroup.eu:9093,ckfqalbrk04.internal.unicreditgroup.eu:9093
   topic: DXSUIWWDPUSIT
   consumerGroupId: DXS01DXSUIWWDPUSIT
   ldapGroup: JUIDXSDPU_CKFDR
