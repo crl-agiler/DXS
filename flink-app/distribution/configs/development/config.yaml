@@ -8,7 +8,7 @@ kafka:
   partitions: 3
 
 schemaRegistry:
-  url: "http://ckfdevlsr01.internal.unicreditgroup.eu:8081"
+  url: "https://ckfdevlsr01.internal.unicreditgroup.eu:8081"
 
 flink:
   baseParallelism: 3
