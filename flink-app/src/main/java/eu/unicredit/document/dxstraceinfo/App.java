@@ -23,6 +23,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.NonNull;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
@@ -213,7 +214,7 @@ public class App {
       throws IOException,
       MalformedCredentialsException {
 
-    Credentials ignored =
+    Credentials credentials =
         credentialsRetriever.getCredentials(
             appConfig.getProjectId(),
             appConfig
@@ -221,7 +222,7 @@ public class App {
                 .getSecretId());
 
     return new DxsKafkaSourceFactory(
-        appConfig)
+        appConfig, credentials)
         .build();
   }
 
@@ -275,7 +276,6 @@ public class App {
   public void runFlinkJob(
       StreamExecutionEnvironment env)
       throws Exception {
-
     env.execute(
         appConfig
             .getFlinkConfig()

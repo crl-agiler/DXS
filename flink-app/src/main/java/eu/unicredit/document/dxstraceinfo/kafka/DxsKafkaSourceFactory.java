@@ -3,7 +3,11 @@ package eu.unicredit.document.dxstraceinfo.kafka;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
+
+import java.util.Map;
 import java.util.Properties;
+
+import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
@@ -17,9 +21,11 @@ public class DxsKafkaSourceFactory {
       LoggerFactory.getLogger(DxsKafkaSourceFactory.class);
 
   private final ConfigApp appConfig;
+  private final Credentials credentials;
 
-  public DxsKafkaSourceFactory(ConfigApp appConfig) {
+  public DxsKafkaSourceFactory(ConfigApp appConfig, Credentials credentials) {
     this.appConfig = appConfig;
+    this.credentials = credentials;
   }
 
   /**
@@ -42,7 +48,11 @@ public class DxsKafkaSourceFactory {
     Properties consumerProps =
         new KafkaPropertiesBuilder(appConfig)
             .buildConsumerProperties();
-
+    Map<String,Object> schemaRegistryConfigurations =
+            Map.of("basic.auth.credentials.source", "USER_INFO",
+            "basic.auth.user.info", String.format("%s:%s",
+                    credentials.getUsername(), credentials.getPassword()
+            ));
     return KafkaSource.<DossierTraceinfoEvent>builder()
         .setBootstrapServers(
             kafkaConfig.getBootstrapServers())
@@ -57,7 +67,8 @@ public class DxsKafkaSourceFactory {
         .setValueOnlyDeserializer(
             ConfluentRegistryAvroDeserializationSchema.forSpecific(
                 DossierTraceinfoEvent.class,
-                schemaRegistryUrl))
+                schemaRegistryUrl,
+                schemaRegistryConfigurations))
         .setProperties(consumerProps)
         .build();
   }
