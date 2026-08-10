@@ -1,58 +1,40 @@
 package eu.unicredit.document.dxstraceinfo;
 
+import eu.unicredit.document.dxstraceinfo.api.SingleSourceLogicPipeline;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.ConfigIcebergCatalog;
 import eu.unicredit.document.dxstraceinfo.config.GcpConfigAppRetriever;
-import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import eu.unicredit.document.dxstraceinfo.credentials.CredentialsRetriever;
 import eu.unicredit.document.dxstraceinfo.credentials.GcpCredentialsRetriever;
-import eu.unicredit.document.dxstraceinfo.credentials.MalformedCredentialsException;
 import eu.unicredit.document.dxstraceinfo.factory.SplitContextFactory;
-import eu.unicredit.document.dxstraceinfo.kafka.DxsKafkaSourceFactory;
-import eu.unicredit.document.dxstraceinfo.sink.IcebergSink;
-import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
-import eu.unicredit.document.dxstraceinfo.transform.SplitTransformLogic;
 import lombok.Builder;
 import lombok.NonNull;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.util.OutputTag;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.CatalogLoader;
-import org.apache.iceberg.flink.TableLoader;
-import org.apache.iceberg.flink.sink.FlinkSink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.time.Duration;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import static org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.MINIMAL_CHECKPOINT_TIME;
 
 @Builder(toBuilder = true)
 public class App {
 
-    public static final String APP_VERSION = "0.0.21";
-    public static final String APP_MAJOR_VERSION =
-            APP_VERSION.split("\\.")[0];
-
     public static final String DP_STORAGE_AREA_NAME =
             "dxs-traceinfo-gcs-storage-area";
-
-    public static final String DP_APP_NAME =
-            "dxs-traceinfo-flink-wl-streaming";
 
     private static final Logger LOG =
             LoggerFactory.getLogger(App.class);
@@ -94,58 +76,42 @@ public class App {
                         .getExecutionEnvironment();
 
         app.setupFlinkJob(env);
-        app.runFlinkJob(env);
     }
 
     public void setupFlinkJob(
             StreamExecutionEnvironment env)
             throws Exception {
-
+        CatalogLoader catalogLoader = createCatalogLoader();
         configureEnvironment(env);
-
-        KafkaSource<DossierTraceinfoEvent> kafkaSource =
-                buildKafkaSource();
-
-        PreKeyFilterProcess dossierIdNotNullProcess = new PreKeyFilterProcess(DISCARD_TAG);
-        KeyedStream<DossierTraceinfoEvent, String> rawStream =
-                env.fromSource(
-                                kafkaSource,
-                                createWatermarkStrategy(),
-                                "DXS Kafka Source")
-                        .uid("kafka-source-dxs")
-                        .process(dossierIdNotNullProcess)
-                        .keyBy(DossierTraceinfoEvent::getMasterDossierId);
-
-        CatalogLoader catalogLoader =
-                createCatalogLoader();
-
         List<SplitContext<?>> splitContexts =
                 new SplitContextFactory(catalogLoader)
                         .create();
-
-        SingleOutputStreamOperator<RowData> transformed =
-                rawStream
-                        .process(
-                                new SplitTransformLogic(
-                                        splitContexts,
-                                        DISCARD_TAG))
-                        .name(
-                                "SplitTransformLogic")
-                        .uid(
-                                "transform-transform-logic");
-
-        new IcebergSink(splitContexts, appConfig.getFlinkConfig())
-                .sinkFrom(transformed);
-
-        configureDiscardSink(
-                transformed,
-                catalogLoader);
-
+        String jobName = appConfig
+                .getFlinkConfig()
+                .getJobName();
+        SingleSourceLogicPipeline<DossierTraceinfoEvent, RowData> pipeline = SingleSourceLogicPipeline.<DossierTraceinfoEvent, RowData>builder()
+                .source(new DSXKafkaSource(appConfig, credentialsRetriever))
+                .processor(new DSXProcessor(DISCARD_TAG, splitContexts))
+                .sink(new DXSSink(appConfig, splitContexts, catalogLoader, DISCARD_TAG))
+                .jobName(jobName).build();
+        pipeline.run(env);
         LOG.info("FLINK STREAM SET UP");
+    }
+    private CatalogLoader createCatalogLoader() {
+
+        ConfigIcebergCatalog catalog =
+                appConfig.getConfigIcebergCatalog();
+
+        return CatalogLoader.hadoop(
+                catalog.getCatalogName(),
+                new Configuration(),
+                Collections.singletonMap(
+                        "warehouse",
+                        catalog.getCatalogLocation()));
     }
 
     private void configureEnvironment(
-            StreamExecutionEnvironment env) {
+            StreamExecutionEnvironment env) throws IOException {
 
         env.setParallelism(
                 appConfig.getFlinkConfig()
@@ -170,15 +136,20 @@ public class App {
 
             return;
         }
-
+        InputStream is = App.class.getResourceAsStream("build.properties");
+        Properties properties = new Properties(3);
+        properties.load(is);
+        String version = properties.getProperty("version");
+        String major = version.split("\\.")[0];
+        String artifactId = properties.getProperty("artifactId");
         String checkpointPath =
                 String.format(
                         "gs://%s/%s/%s/%s/%s/checkpoints",
                         appConfig.getBucketName(),
-                        APP_MAJOR_VERSION,
+                        major,
                         DP_STORAGE_AREA_NAME,
-                        DP_APP_NAME,
-                        APP_VERSION);
+                        artifactId,
+                        version);
 
         env.enableCheckpointing(checkpointMs);
 
@@ -212,77 +183,5 @@ public class App {
                         CheckpointConfig
                                 .ExternalizedCheckpointCleanup
                                 .RETAIN_ON_CANCELLATION);
-    }
-
-    private KafkaSource<DossierTraceinfoEvent> buildKafkaSource()
-            throws IOException,
-            MalformedCredentialsException {
-
-        Credentials credentials =
-                credentialsRetriever.getCredentials(
-                        appConfig.getProjectId(),
-                        appConfig
-                                .getSchemaRegistryConfig()
-                                .getSecretId());
-
-        return new DxsKafkaSourceFactory(
-                appConfig, credentials)
-                .build();
-    }
-
-    private CatalogLoader createCatalogLoader() {
-
-        ConfigIcebergCatalog catalog =
-                appConfig.getConfigIcebergCatalog();
-
-        return CatalogLoader.hadoop(
-                catalog.getCatalogName(),
-                new Configuration(),
-                Collections.singletonMap(
-                        "warehouse",
-                        catalog.getCatalogLocation()));
-    }
-
-
-    private void configureDiscardSink(
-            SingleOutputStreamOperator<RowData> stream,
-            CatalogLoader catalogLoader) {
-
-        TableLoader discardTableLoader =
-                TableLoader.fromCatalog(
-                        catalogLoader,
-                        TableIdentifier.of(
-                                DISCARD_TAG.getId()));
-
-        FlinkSink
-                .forRowData(
-                        stream.getSideOutput(
-                                DISCARD_TAG))
-                .tableLoader(
-                        discardTableLoader)
-                .upsert(false)
-                .append();
-    }
-
-    private WatermarkStrategy<DossierTraceinfoEvent> createWatermarkStrategy() {
-
-        return WatermarkStrategy
-                .<DossierTraceinfoEvent>
-                        forBoundedOutOfOrderness(
-                        Duration.ofSeconds(30))
-                .withTimestampAssigner(
-                        (event, ts) ->
-                                event
-                                        .getEventTimestamp()
-                                        .toEpochMilli());
-    }
-
-    public void runFlinkJob(
-            StreamExecutionEnvironment env)
-            throws Exception {
-        env.execute(
-                appConfig
-                        .getFlinkConfig()
-                        .getJobName());
     }
 }

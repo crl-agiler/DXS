@@ -473,6 +473,10 @@
         <testSourceDirectory>src/test/java</testSourceDirectory>
         <resources>
             <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <directory>distribution</directory>
             </resource>
         </resources>
