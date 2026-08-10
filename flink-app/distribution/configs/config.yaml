@@ -9,7 +9,7 @@ projectId: # ENVIRONMENT-SPECIFIC
 flink:
   # vCPU x task managers x task slot per vCPU
   baseParallelism: # ENVIRONMENT-SPECIFIC
-  checkpointInterval: "PT10M"
+  checkpointInterval: "PT1M"
 
 ## SOURCES
 schemaRegistry:

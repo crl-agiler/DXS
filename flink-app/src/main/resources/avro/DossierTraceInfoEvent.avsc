@@ -23,7 +23,7 @@
     {
       "name": "dossierId",
       "type": "long",
-      "javaAnnotation": "javax.validation.constraints.Positive"
+      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
     },
     {
       "name": "applicationCode",
@@ -38,7 +38,7 @@
     {
       "name": "reprint",
       "type": "string",
-      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(Y|N)$\")"
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
     },
     {
       "name": "exeApp",
@@ -81,7 +81,7 @@
         "string"
       ],
       "default": null,
-      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(FORCED_BY_VERTICAL|SELECTED_BY_USER)$\")"
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(FORCED_BY_VERTICAL|SELECTED_BY_USER)?$\")"
     },
     {
       "name": "practiceId",
@@ -218,7 +218,7 @@
             {
               "name": "id",
               "type": "long",
-              "javaAnnotation": "javax.validation.constraints.Positive"
+              "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
             },
             {
               "name": "digilayerId",
@@ -268,7 +268,7 @@
                     {
                       "name": "id",
                       "type": "long",
-                      "javaAnnotation": "javax.validation.constraints.Positive"
+                      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
                     },
                     {
                       "name": "ndg",
@@ -334,7 +334,7 @@
                     {
                       "name": "id",
                       "type": "long",
-                      "javaAnnotation": "javax.validation.constraints.Positive"
+                      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
                     },
                     {
                       "name": "code",
@@ -368,7 +368,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|BRANCH_INDIVIDUALS)$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|BRANCH_INDIVIDUALS)?$\")"
                     },
                     {
                       "name": "size",
@@ -377,7 +377,7 @@
                         "long"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Positive"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.PositiveOrZero"
                     },
                     {
                       "name": "controlsOutcomePec",
@@ -422,7 +422,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
                     },
                     {
                       "name": "archiveLink",
@@ -440,7 +440,7 @@
                         "long"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Positive"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.PositiveOrZero"
                     },
                     {
                       "name": "accountNumber",
@@ -476,7 +476,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
                     },
                     {
                       "name": "datamatrix",

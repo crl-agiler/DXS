@@ -12,10 +12,10 @@ schemaRegistry:
 
 flink:
   baseParallelism: 12
-  checkpointInterval: "PT2H"
+  checkpointInterval: "PT1M"
   checkpointIntervalMs: 60000
   checkpointTimeoutMs: 120000
-  minPauseBetweenCheckpointsMs: 20000
+  minPauseBetweenCheckpointsMs: 30000
 
 catalog:
   catalogLocation: 'gs://dxs_traceinfo_ew8_production/0/dxs-traceinfo-dremio-storage-area'
