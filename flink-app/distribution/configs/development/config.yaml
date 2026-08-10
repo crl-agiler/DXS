@@ -1,14 +1,14 @@
 projectId: "prj-dpu-dev-dataplatform-001"
 
 kafka:
-  bootstrapServers: ckfdevlbrk01.internal.unicreditgroup.eu:9093
-  topic: DXSUIWWDPUSIT
-  consumerGroupId: DXS01DXSUIWWDPUSIT
-  ldapGroup: JUIDXSDPU_CKFDR
+  bootstrapServers: "ckfdevlbrk01.internal.unicreditgroup.eu:9093"
+  topic: "DXSUIWWDPUSIT"
+  consumerGroupId: "DXS01DXSUIWWDPUSIT"
+  ldapGroup: "JUIDXSDPU_CKFDR"
   partitions: 3
 
 schemaRegistry:
-  url: http://ckfdevlsr01.internal.unicreditgroup.eu:8081
+  url: "https://ckfdevlsr01.internal.unicreditgroup.eu:8081"
 
 flink:
   baseParallelism: 3
