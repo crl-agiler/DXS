@@ -6,6 +6,8 @@ import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
@@ -19,9 +21,12 @@ public class DxsKafkaSourceFactory {
       LoggerFactory.getLogger(DxsKafkaSourceFactory.class);
 
   private final ConfigApp appConfig;
+  private final Credentials credentials;
 
-  public DxsKafkaSourceFactory(ConfigApp appConfig) {
+  public DxsKafkaSourceFactory(ConfigApp appConfig, Credentials credentials) {
     this.appConfig = appConfig;
+    this.credentials = credentials;
+
   }
 
   /**
@@ -49,7 +54,7 @@ public class DxsKafkaSourceFactory {
         propsBuilder.buildConsumerProperties();
 
     Map<String, Object> srConfig =
-        toMap(propsBuilder.buildSchemaRegistryProperties());
+        toMap(propsBuilder.buildSchemaRegistryProperties(credentials));
 
     return KafkaSource.<DossierTraceinfoEvent>builder()
         .setBootstrapServers(
@@ -71,7 +76,7 @@ public class DxsKafkaSourceFactory {
   }
 
   private static Map<String, Object> toMap(Properties properties) {
-    Map<String, Object> map = new HashMap<>();
+    Map<String, Object> map = new HashMap<>(properties.size());
     properties.forEach((k, v) -> map.put(k.toString(), v));
     return map;
   }

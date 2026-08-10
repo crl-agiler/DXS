@@ -3,6 +3,7 @@ package eu.unicredit.document.dxstraceinfo.kafka;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
 import eu.unicredit.document.dxstraceinfo.config.ConfigSchemaRegistry;
+import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
@@ -141,7 +142,7 @@ public class KafkaPropertiesBuilder {
    * Builds a minimal set of Schema Registry client properties,
    * useful for direct schema introspection or health checks.
    */
-  public Properties buildSchemaRegistryProperties() {
+  public Properties buildSchemaRegistryProperties(Credentials credentials) {
 
     ConfigSchemaRegistry sr =
         appConfig.getSchemaRegistryConfig();
@@ -152,6 +153,9 @@ public class KafkaPropertiesBuilder {
     props.setProperty(
         AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG,
         sr.getUrl());
+
+    props.setProperty("basic.auth.credentials.source", "USER_INFO");
+    props.setProperty("basic.auth.user.info", credentials.getUsername() + ":" + credentials.getPassword());
 
     if (sr.isSecure()) {
 
