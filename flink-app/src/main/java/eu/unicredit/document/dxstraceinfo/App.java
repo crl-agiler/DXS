@@ -44,7 +44,7 @@ import static org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfi
 @Builder(toBuilder = true)
 public class App {
 
-    public static final String APP_VERSION = "0.0.18";
+    public static final String APP_VERSION = "0.0.19";
     public static final String APP_MAJOR_VERSION =
             APP_VERSION.split("\\.")[0];
 
