@@ -1,8 +1,9 @@
 package eu.unicredit.document.dxstraceinfo.transform;
 
+import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.tools.JsonUtils;
-import java.time.Instant;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,11 +18,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
-import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
-import org.apache.flink.table.data.StringData;
-import org.apache.flink.table.data.TimestampData;
-import org.apache.flink.types.RowKind;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.slf4j.Logger;
@@ -45,7 +42,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
       LoggerFactory.getLogger(SplitTransformLogic.class);
 
   private final List<SplitContext<?>> splitContexts;
-  private final OutputTag<RowData> discardOutput;
+  private final ErrorHandler<DossierTraceinfoEvent> errorHandler;
 
   private transient ValidatorFactory validatorFactory;
   private transient Validator validator;
@@ -54,22 +51,22 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
    * Creates the transformation function.
    *
    * @param splitContexts contexts used to extract, map, and emit business records
-   * @param discardOutput side output used for rejected events
+   * @param errorHandler side output used for rejected events
    * @throws NullPointerException if an argument is {@code null}
    */
   public SplitTransformLogic(
       List<SplitContext<?>> splitContexts,
-      OutputTag<RowData> discardOutput) {
+      ErrorHandler<DossierTraceinfoEvent> errorHandler) {
 
     this.splitContexts =
         Objects.requireNonNull(
             splitContexts,
             "splitContexts must not be null");
 
-    this.discardOutput =
+    this.errorHandler =
         Objects.requireNonNull(
-            discardOutput,
-            "discardOutput must not be null");
+                errorHandler,
+            "errorHandler must not be null");
   }
 
   /**
@@ -117,12 +114,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
       LOGGER.info(
           "Event validation failed: {}",
           validationError);
-
-      toDiscardOutput(
-          event,
-          context,
-          validationError);
-
+      this.errorHandler.handle(event, validationError, context::output);
       return;
     }
 
@@ -140,11 +132,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
       LOGGER.error(
           "Exception occurred during extraction or mapping. Sending event to the discard table",
           exception);
-
-      toDiscardOutput(
-          event,
-          context,
-          createProcessingError(exception));
+      this.errorHandler.handle(event, createProcessingError(exception), context::output);
     }
   }
 
@@ -256,29 +244,6 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
                 "")));
   }
 
-  /**
-   * Writes an event and its error information to the discard side output.
-   *
-   * @param event     discarded event
-   * @param context   Flink processing context
-   * @param errorJson structured error serialized as JSON
-   */
-  private void toDiscardOutput(
-      DossierTraceinfoEvent event,
-      Context context,
-      String errorJson) {
-
-    context.output(
-        discardOutput,
-        GenericRowData.ofKind(
-            RowKind.INSERT,
-            StringData.fromString(
-                event.toString()),
-            StringData.fromString(
-                errorJson),
-            TimestampData.fromInstant(
-                Instant.now())));
-  }
 
   /**
    * Closes the Bean Validation factory.

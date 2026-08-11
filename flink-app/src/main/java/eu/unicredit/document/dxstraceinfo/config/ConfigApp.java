@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import eu.unicredit.document.dxstraceinfo.App;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +25,7 @@ import lombok.extern.jackson.Jacksonized;
 @Builder(toBuilder = true)
 // jackson annotations
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonClassDescription("Configurations for `" + App.DP_APP_NAME + "`")
+@JsonClassDescription("Configurations for `Flink job`")
 @JsonTypeName(ConfigApp.TYPE)
 public class ConfigApp implements Serializable, JakartaValidable {
 
@@ -35,7 +34,7 @@ public class ConfigApp implements Serializable, JakartaValidable {
    * Note: use @Valid for fields with custom types. @AssertTrue/False methods must start with "is".
    */
   @JsonIgnore
-  public static final String TYPE = App.DP_APP_NAME + "_config";
+  public static final String TYPE = "dxs-traceinfo-flink-streaming-wl_config";
 
   @JsonIgnore
   String bucketName;

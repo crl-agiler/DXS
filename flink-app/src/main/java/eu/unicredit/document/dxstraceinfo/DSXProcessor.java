@@ -1,7 +1,9 @@
 package eu.unicredit.document.dxstraceinfo;
 
+import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.api.Processor;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
+import eu.unicredit.document.dxstraceinfo.handler.FlinkSimpleErrorHandler;
 import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import eu.unicredit.document.dxstraceinfo.transform.SplitTransformLogic;
@@ -22,8 +24,9 @@ public class DSXProcessor implements Processor<DossierTraceinfoEvent, RowData> {
 
     @Override
     public DataStream<RowData> process(DataStream<DossierTraceinfoEvent> input) {
-        PreKeyFilterProcess dossierIdNotNullProcess = new PreKeyFilterProcess(discardTag);
-        SplitTransformLogic splitTransformLogic = new SplitTransformLogic(splitContexts, discardTag);
+        ErrorHandler<DossierTraceinfoEvent> errorHandler = new FlinkSimpleErrorHandler(discardTag);
+        PreKeyFilterProcess dossierIdNotNullProcess = new PreKeyFilterProcess(errorHandler);
+        SplitTransformLogic splitTransformLogic = new SplitTransformLogic(splitContexts, errorHandler);
         SingleOutputStreamOperator<DossierTraceinfoEvent> process = input.process(dossierIdNotNullProcess);
         KeyedStream<DossierTraceinfoEvent, String> dossierTraceinfoEventStringKeyedStream = process.keyBy(DossierTraceinfoEvent::getMasterDossierId);
         SingleOutputStreamOperator<RowData> outputStreamOperator = dossierTraceinfoEventStringKeyedStream.process(splitTransformLogic);

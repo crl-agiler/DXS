@@ -31,9 +31,9 @@ public class ConfigFlink implements Serializable {
 
   @Builder.Default
   @Valid
-  @JsonProperty(value = "jobName", defaultValue = App.DP_APP_NAME)
+  @JsonProperty(value = "jobName", defaultValue = "dxs-traceinfo-flink-streaming-wl")
   @JsonPropertyDescription("Flink Job Name")
-  String jobName = App.DP_APP_NAME;
+  String jobName = "dxs-traceinfo-flink-streaming-wl";
 
   @NotNull
   @Valid

@@ -13,6 +13,8 @@ public class SingleSourceLogicPipeline<I, O> implements Pipeline {
     private final Source<I> source;
     private final Processor<I, O> processor;
     private final Sink<O> sink;
+    @Builder.Default
+    private final FlinkConfiguration flinkConfiguration = FlinkConfiguration.NONE;
 
     @Override
     public String jobName() {
@@ -21,7 +23,10 @@ public class SingleSourceLogicPipeline<I, O> implements Pipeline {
 
     @Override
     public void run(StreamExecutionEnvironment streamExecutionEnvironment) throws Exception {
+        flinkConfiguration.configure(streamExecutionEnvironment);
         source.onInit();
+        processor.onInit();
+        sink.onInit();
         DataStream<I> source = this.source.source(streamExecutionEnvironment);
         DataStream<O> process = processor.process(source);
         sink.sink((SingleOutputStreamOperator<O>) process);
