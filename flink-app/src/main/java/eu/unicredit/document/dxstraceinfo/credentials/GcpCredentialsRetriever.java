@@ -3,8 +3,11 @@ package eu.unicredit.document.dxstraceinfo.credentials;
 import eu.unicredit.document.dxstraceinfo.tools.GcpUtils;
 import eu.unicredit.document.dxstraceinfo.tools.JsonUtils;
 import eu.unicredit.document.dxstraceinfo.tools.ParsingException;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 
+@ApplicationScoped
 public class GcpCredentialsRetriever implements CredentialsRetriever {
 
   @Override

@@ -150,8 +150,8 @@ public class JsonUtils {
    */
   public static JsonNode mergeArrayNodesBySelectorField(
       ArrayNode baseArray, ArrayNode updateArray, String selectorField) {
-    ObjectNode baseElementsMap = YamlUtils.mapper.createObjectNode();
-    ArrayNode mergedArray = YamlUtils.mapper.createArrayNode();
+    ObjectNode baseElementsMap = mapper.createObjectNode();
+    ArrayNode mergedArray = mapper.createArrayNode();
 
     // Create a map of elements in the base array by the selector field
     for (JsonNode baseElement : baseArray) {

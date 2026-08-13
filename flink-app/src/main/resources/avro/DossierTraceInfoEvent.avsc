@@ -431,7 +431,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^\\\\./[A-Za-z0-9._/-]+$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^\\\\./[A-Za-z0-9._/-]*$\")"
                     },
                     {
                       "name": "numberOfPages",

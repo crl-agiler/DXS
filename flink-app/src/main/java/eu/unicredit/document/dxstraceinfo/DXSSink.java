@@ -3,6 +3,7 @@ package eu.unicredit.document.dxstraceinfo;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.table.data.RowData;
@@ -13,9 +14,12 @@ import org.apache.iceberg.flink.CatalogLoader;
 import org.apache.iceberg.flink.TableLoader;
 import org.apache.iceberg.flink.sink.FlinkSink;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.List;
 
-@AllArgsConstructor
+@ApplicationScoped
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class DXSSink implements Sink<RowData>  {
 
     private final ConfigApp configApp;

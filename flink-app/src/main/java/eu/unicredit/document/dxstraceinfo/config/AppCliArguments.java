@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 @EqualsAndHashCode
 public class AppCliArguments {
 
-  private static final Logger LOG = LoggerFactory.getLogger(AppCliArguments.class);
-
   @Parameter(names = {"-b", "--bucketName"},
       description = "GCS bucket name", required = true)
   private String bucketName;
@@ -27,13 +25,4 @@ public class AppCliArguments {
       description = "Path of the environment configuration file inside the bucket", required = true)
   private String envConfigPath;
 
-  /**
-   * Parse Cli arguments.
-   */
-  public static AppCliArguments parse(String[] args) {
-    final AppCliArguments argv = new AppCliArguments();
-    JCommander.newBuilder().addObject(argv).build().parse(args);
-    LOG.info("Arguments read: [{}]", argv);
-    return argv;
-  }
 }

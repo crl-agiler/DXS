@@ -1,6 +1,7 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
 import eu.unicredit.document.dxstraceinfo.tools.JavaUtils;
+import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import lombok.Builder;
 import lombok.NonNull;
 import org.junit.platform.commons.util.StringUtils;
@@ -24,11 +25,12 @@ public class MockConfigAppRetriever
   @NonNull
   private final String kafkaBootstrapServers;
 
+  private final String bucket;
+  private final String baseConfigPath;
+  private final String envConfigPath;
+
   @Override
-  public ConfigApp getConfig(
-      String bucket,
-      String baseConfigPath,
-      String envConfigPath) {
+  public ConfigApp getConfig() {
 
     final String pathPrefix =
         StringUtils.isNotBlank(bucket) ?
@@ -76,10 +78,6 @@ public class MockConfigAppRetriever
         envConfigYaml);
 
 
-    return ConfigAppRetriever
-        .parseAndValidateYaml(
-            bucket,
-            baseConfigYaml,
-            envConfigYaml);
+    return YamlUtils.merge(baseConfigYaml, envConfigYaml, ConfigApp.class);
   }
 }

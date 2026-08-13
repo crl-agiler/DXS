@@ -9,6 +9,7 @@ import eu.unicredit.document.dxstraceinfo.credentials.MalformedCredentialsExcept
 import eu.unicredit.document.dxstraceinfo.kafka.DxsKafkaSourceFactory;
 import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -17,10 +18,13 @@ import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.OutputTag;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.time.Duration;
 
-@AllArgsConstructor
+@ApplicationScoped
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class DSXKafkaSource implements Source<DossierTraceinfoEvent> {
 
     private final ConfigApp configApp;

@@ -1,7 +1,11 @@
 package eu.unicredit.document.dxstraceinfo.credentials;
 
+import javax.annotation.Priority;
+import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 
+@ApplicationScoped
+@Priority(999)
 public class MockCredentialsRetriever implements CredentialsRetriever {
 
   /**

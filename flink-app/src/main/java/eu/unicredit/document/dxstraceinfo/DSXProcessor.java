@@ -8,15 +8,19 @@ import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import eu.unicredit.document.dxstraceinfo.transform.SplitTransformLogic;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.util.OutputTag;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.List;
 
-@AllArgsConstructor
+@ApplicationScoped
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 public class DSXProcessor implements Processor<DossierTraceinfoEvent, RowData> {
 
     private final OutputTag<RowData> discardTag;
