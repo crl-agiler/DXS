@@ -69,6 +69,7 @@ class DSXFlinkConfigurationTest {
 
         ConfigApp appConfig = mock(ConfigApp.class);
         ConfigFlink flinkConfig = mock(ConfigFlink.class);
+        AppCliArguments appCliArguments = mock(AppCliArguments.class);
 
         DXSContext context = mock(DXSContext.class);
 
@@ -82,6 +83,7 @@ class DSXFlinkConfigurationTest {
                 mock(CheckpointConfig.class);
 
         when(context.config()).thenReturn(appConfig);
+        when(context.args()).thenReturn(appCliArguments);
         when(appConfig.getFlinkConfig()).thenReturn(flinkConfig);
 
         when(context.streamingExecutionEnv()).thenReturn(env);
@@ -90,7 +92,7 @@ class DSXFlinkConfigurationTest {
         when(env.getCheckpointConfig())
                 .thenReturn(checkpointConfig);
 
-        when(appConfig.getBucketName())
+        when(appCliArguments.getBucketName())
                 .thenReturn("test-bucket");
 
         when(flinkConfig.getBaseParallelism())

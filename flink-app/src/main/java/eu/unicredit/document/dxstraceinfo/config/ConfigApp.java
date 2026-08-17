@@ -36,9 +36,6 @@ public class ConfigApp implements Serializable {
   @JsonIgnore
   public static final String TYPE = "dxs-traceinfo-flink-streaming-wl_config";
 
-  @JsonIgnore
-  String bucketName;
-
   @NotNull
   @Valid
   @JsonProperty(value = "projectId", required = true)

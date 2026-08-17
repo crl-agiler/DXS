@@ -32,7 +32,8 @@ public class DSXFlinkConfiguration implements FlinkConfiguration {
             return;
         }
         ArtifactInformation artifactInformation = context.artifactInformation();
-        String checkpointPath = String.format("gs://%s/%s/%s/%s/%s/checkpoints", appConfig.getBucketName(), artifactInformation.getMajor(), DP_STORAGE_AREA_NAME, artifactInformation.getArtifactName(), artifactInformation.getVersion());
+        AppCliArguments args = context.args();
+        String checkpointPath = String.format("gs://%s/%s/%s/%s/%s/checkpoints", args.getBucketName(), artifactInformation.getMajor(), DP_STORAGE_AREA_NAME, artifactInformation.getArtifactName(), artifactInformation.getVersion());
 
         env.enableCheckpointing(checkpointMs);
 
