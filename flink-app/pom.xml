@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.unicredit</groupId>
     <artifactId>dxs-traceinfo-flink-streaming-wl</artifactId>
-    <version>0.0.23</version>
+    <version>0.0.24</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -541,12 +541,6 @@
                                         <exclude>META-INF/*-NOTICE</exclude>
                                         <exclude>META-INF/MANIFEST.MF</exclude>
                                         <exclude>META-INF/DEPENDENCIES</exclude>
-                                        <exclude>META-INF/licenses-binary/*</exclude>
-                                        <exclude>META-INF/jersey-module-version</exclude>
-                                        <exclude>META-INF/proguard/*</exclude>
-                                        <exclude>mozilla/public-suffix-list.txt</exclude>
-                                        <exclude>META-INF/io.netty.versions.properties</exclude>
-                                        <exclude>iceberg-build.properties</exclude>
                                     </excludes>
                                 </filter>
                                 <filter>
