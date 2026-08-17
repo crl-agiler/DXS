@@ -1,12 +1,9 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
-import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Getter
 @ToString

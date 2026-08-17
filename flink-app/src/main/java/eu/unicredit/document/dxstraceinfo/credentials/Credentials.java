@@ -2,11 +2,12 @@ package eu.unicredit.document.dxstraceinfo.credentials;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 // lombok annotations
 @Value

@@ -7,12 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
-import java.io.Serializable;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
 
 // lombok annotations
 @Value

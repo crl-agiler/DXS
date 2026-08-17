@@ -3,6 +3,11 @@ package eu.unicredit.document.dxstraceinfo.tools;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.flink.util.ExceptionUtils;
+import org.jooq.lambda.tuple.Tuple2;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -13,10 +18,6 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.util.ExceptionUtils;
-import org.jooq.lambda.tuple.Tuple2;
 
 public class JavaUtils {
 

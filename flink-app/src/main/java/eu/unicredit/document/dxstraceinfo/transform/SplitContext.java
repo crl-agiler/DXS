@@ -1,13 +1,14 @@
 package eu.unicredit.document.dxstraceinfo.transform;
 
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import java.io.Serializable;
-import java.util.List;
 import lombok.Getter;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.util.OutputTag;
 import org.apache.iceberg.flink.TableLoader;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Encapsulates all the information required to process a specific section of a
@@ -94,7 +95,7 @@ public class SplitContext<T> implements Serializable {
    * @param <X>          type of extracted objects
    * @return a fully configured {@code SplitContext}
    */
-  public static <X> SplitContext<X> of(
+  public static <X extends Serializable> SplitContext<X> of(
       MapFunction<DossierTraceinfoEvent, List<X>> extractor,
       MapFunction<X, RowData> mapper,
       OutputTag<RowData> outputTag,

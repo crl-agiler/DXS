@@ -1,16 +1,17 @@
 package eu.unicredit.document.dxstraceinfo.it;
 
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
+import org.junit.jupiter.api.Assertions;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import org.junit.jupiter.api.Assertions;
 
 public final class DossierTestData {
 

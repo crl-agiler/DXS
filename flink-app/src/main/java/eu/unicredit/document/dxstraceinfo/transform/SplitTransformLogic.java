@@ -3,16 +3,6 @@ package eu.unicredit.document.dxstraceinfo.transform;
 import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.tools.JsonUtils;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -23,6 +13,16 @@ import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Validates and transforms dossier trace-info events.

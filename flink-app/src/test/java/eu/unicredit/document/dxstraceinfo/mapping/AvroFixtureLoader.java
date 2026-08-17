@@ -1,11 +1,12 @@
 package eu.unicredit.document.dxstraceinfo.mapping;
 
-import java.nio.charset.StandardCharsets;
 import org.apache.avro.Schema;
 import org.apache.avro.io.Decoder;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificRecord;
+
+import java.nio.charset.StandardCharsets;
 
 public class AvroFixtureLoader {
 

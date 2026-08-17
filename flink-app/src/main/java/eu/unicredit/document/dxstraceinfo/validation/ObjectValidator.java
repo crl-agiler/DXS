@@ -1,25 +1,28 @@
 package eu.unicredit.document.dxstraceinfo.validation;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.Validator;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
-public class ObjectValidator {
+public final class ObjectValidator {
+
+    private static final ObjectValidator INSTANCE = new ObjectValidator(Validation.buildDefaultValidatorFactory().getValidator());
 
     private final Validator validator;
 
-    @Inject
-    public ObjectValidator(Validator validator) {
+    private ObjectValidator(Validator validator) {
         this.validator = Objects.requireNonNull(
                 validator,
                 "validator cannot be null"
         );
+    }
+
+    public static ObjectValidator getInstance() {
+        return INSTANCE;
     }
 
     /**
@@ -44,8 +47,7 @@ public class ObjectValidator {
 
         String errors = violations.stream()
                 .sorted(Comparator.comparing(
-                        violation ->
-                                violation.getPropertyPath().toString()
+                        violation -> violation.getPropertyPath().toString()
                 ))
                 .map(ObjectValidator::formatViolation)
                 .collect(Collectors.joining(

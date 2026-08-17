@@ -1,6 +1,5 @@
 package eu.unicredit.document.dxstraceinfo.api;
 
-import org.apache.flink.runtime.operators.shipping.OutputEmitter;
 import org.apache.flink.util.OutputTag;
 
 import java.io.Serializable;

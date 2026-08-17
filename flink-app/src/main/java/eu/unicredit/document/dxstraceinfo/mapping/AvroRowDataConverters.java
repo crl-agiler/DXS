@@ -1,8 +1,9 @@
 package eu.unicredit.document.dxstraceinfo.mapping;
 
-import java.time.Instant;
 import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.data.TimestampData;
+
+import java.time.Instant;
 
 public final class AvroRowDataConverters {
 

@@ -7,21 +7,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
-import java.io.Serializable;
-import java.util.Map;
-import javax.validation.Valid;
-import javax.validation.constraints.AssertFalse;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-// lombok annotations
+import javax.validation.Valid;
+import javax.validation.constraints.AssertFalse;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.Map;
+
 @Value
 @Jacksonized
 @Builder
-// jackson annotations
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonClassDescription("Configurations for all Kafka Sources")
 @JsonTypeName(ConfigKafka.TYPE)

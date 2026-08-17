@@ -1,14 +1,16 @@
 package eu.unicredit.document.dxstraceinfo.model;
 
-import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.Instant;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryLogRecord {
+public class HistoryLogRecord implements Serializable {
   private Long historyLogId;
   private Long levelIdIdentifier;
   private String status;

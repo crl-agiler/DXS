@@ -1,19 +1,20 @@
 package eu.unicredit.document.dxstraceinfo.mapping;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import eu.unicredit.document.dxstraceinfo.avro.Document;
 import eu.unicredit.document.dxstraceinfo.avro.DocumentGroup;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.avro.Signer;
-import java.util.stream.Stream;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.StringData;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MapperIntegrationTest {
 

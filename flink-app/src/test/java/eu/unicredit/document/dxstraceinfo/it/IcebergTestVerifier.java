@@ -1,27 +1,9 @@
 package eu.unicredit.document.dxstraceinfo.it;
 
 
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DISCARD_LOG_TABLE;
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOCUMENTS_GROUP_TABLE;
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOCUMENT_TABLE;
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOSSIER_TABLE;
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.HISTORY_LOG_TABLE;
-import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.SIGNER_TABLE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import java.io.IOException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.execution.JobClient;
@@ -32,6 +14,25 @@ import org.apache.iceberg.data.IcebergGenerics;
 import org.apache.iceberg.data.Record;
 import org.apache.iceberg.io.CloseableIterable;
 import org.awaitility.Awaitility;
+
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DISCARD_LOG_TABLE;
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOCUMENTS_GROUP_TABLE;
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOCUMENT_TABLE;
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.DOSSIER_TABLE;
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.HISTORY_LOG_TABLE;
+import static eu.unicredit.document.dxstraceinfo.it.FlinkDSXTraceInfoIT.SIGNER_TABLE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public final class IcebergTestVerifier {

@@ -7,6 +7,6 @@ public interface CredentialsRetriever {
   /**
    * Retrieve Credentials from the Secret Manager (i.e. GCP Secret Manager)
    */
-  Credentials getCredentials(String projectId, String secretId) throws IOException, MalformedCredentialsException;
+  Credentials getCredentials(String... params) throws IOException, MalformedCredentialsException;
 
 }

@@ -2,20 +2,22 @@ package eu.unicredit.document.dxstraceinfo.it;
 
 import com.datarocks.schemaregistry.test.junit5.SharedSchemaRegistryTestResource;
 import com.salesforce.kafka.test.junit5.SharedKafkaTestResource;
+import eu.unicredit.document.dxstraceinfo.App;
 import eu.unicredit.document.dxstraceinfo.DXSApplication;
+import eu.unicredit.document.dxstraceinfo.api.AdditionalContextProperty;
+import eu.unicredit.document.dxstraceinfo.api.DXSContext;
+import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.MockConfigAppRetriever;
+import eu.unicredit.document.dxstraceinfo.context.CatalogLoaderProperty;
 import eu.unicredit.document.dxstraceinfo.credentials.MockCredentialsRetriever;
 import io.confluent.kafka.schemaregistry.rest.SchemaRegistryConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.api.CheckpointingMode;
-import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.iceberg.Schema;
@@ -23,8 +25,6 @@ import org.apache.iceberg.catalog.Catalog;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.CatalogLoader;
 import org.instancio.junit.InstancioExtension;
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -34,14 +34,13 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.CleanupMode;
 import org.junit.jupiter.api.io.TempDir;
 
-import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -184,6 +183,7 @@ class FlinkDSXTraceInfoIT {
 
   @Test
   void run() throws Exception {
+
     DossierTestData testData =
             DossierTestData.generate(
                     VALID_EVENT_COUNT,
@@ -197,34 +197,37 @@ class FlinkDSXTraceInfoIT {
 
     publisher.publish(testData.getAllEvents());
 
-    Weld weld =
-            new Weld()
-                    .enableDiscovery()
-                    .addBeanClass(MockCredentialsRetriever.class)
-                    .addBeanClass(FlinkTestConfiguration.class)
-                    .addBeanClass(TestConfiguration.class)
-                    .addAlternative(MockCredentialsRetriever.class)
-                    .addAlternative(FlinkTestConfiguration.class)
-                    .addAlternative(TestConfiguration.class);
 
     StreamExecutionEnvironment environment =
             StreamExecutionEnvironment.getExecutionEnvironment();
-    try (WeldContainer container = weld.initialize()) {
-      DXSApplication application =
-              container
-                      .select(DXSApplication.class)
-                      .get();
 
-      application.execute(environment);
+    List<AdditionalContextProperty> additionalContextProperties = TestAdditionalContextProperties.builder()
+            .fromApplicationAdditionalContextProperties()
+            .overrideAdditionalContextProperties(new AdditionalContextProperty() {
+              @Override
+              public String name() {
+                return CatalogLoaderProperty.CATALOG_LOADER;
+              }
 
-      ConfigApp configApp =
-              container
-                      .select(ConfigApp.class)
-                      .get();
-
-      JobClient jobClient =
+              @Override
+              @SuppressWarnings("unchecked")
+              public CatalogLoader instance(DXSContext context) {
+                return TestConfiguration.catalogLoader();
+              }
+            }).build();
+    DXSApplication dxsApplication = DXSApplication.builder()
+            .argsParser((s) -> new AppCliArguments())
+            .configAppRetriever(c -> TestConfiguration.configApp())
+            .credentialsRetriever(new MockCredentialsRetriever())
+            .flinkConfiguration(new FlinkTestConfiguration())
+            .additionalContextProperties(additionalContextProperties)
+            .pipeline(App.pipeline())
+            .bootstrap(new String[]{});
+      dxsApplication.execute();
+    DXSContext dxsContext = getDSXContextFromDXSApplication(dxsApplication);
+    JobClient jobClient =
               environment.executeAsync(
-                      configApp
+                      dxsContext.config()
                               .getFlinkConfig()
                               .getJobName());
 
@@ -250,7 +253,12 @@ class FlinkDSXTraceInfoIT {
       } finally {
         cancelJobIfRunning(jobClient);
       }
-    }
+  }
+
+  private static DXSContext getDSXContextFromDXSApplication(DXSApplication dxsApplication) throws NoSuchFieldException, IllegalAccessException {
+    Field dxsContext = DXSApplication.class.getField("dxsContext");
+    dxsContext.setAccessible(true);
+    return (DXSContext) dxsContext.get(dxsApplication);
   }
 
   private static void loadAvroSchema() throws IOException {
@@ -365,20 +373,19 @@ class FlinkDSXTraceInfoIT {
     }
   }
 
-  @Alternative
   public static class TestConfiguration {
 
-    @Produces
-    @Singleton
-    public CatalogLoader catalogLoader() {
+    public static CatalogLoader catalogLoader() {
       return Objects.requireNonNull(
               FlinkDSXTraceInfoIT.catalogLoader,
               "catalogLoader has not been initialized");
     }
 
-    @Produces
-    @Singleton
-    public ConfigApp configApp() {
+    public static AppCliArguments cliArguments() {
+      return new AppCliArguments();
+    }
+
+    public static ConfigApp configApp() {
       return MockConfigAppRetriever.builder()
               .schemaRegistryUrl(
                       schemaRegistry.schemaRegistryUrl())
@@ -402,4 +409,5 @@ class FlinkDSXTraceInfoIT {
             .normalize()
             .toString();
   }
+
 }

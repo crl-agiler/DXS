@@ -1,56 +1,59 @@
-package eu.unicredit.document.dxstraceinfo;
+package eu.unicredit.document.dxstraceinfo.pipeline;
 
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.api.DXSContext;
+import eu.unicredit.document.dxstraceinfo.api.Sink;
+import eu.unicredit.document.dxstraceinfo.context.CatalogLoaderProperty;
+import eu.unicredit.document.dxstraceinfo.context.DiscardOutputTagProperty;
+import eu.unicredit.document.dxstraceinfo.context.SplitContextListProperty;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.table.data.RowData;
-import eu.unicredit.document.dxstraceinfo.api.Sink;
 import org.apache.flink.util.OutputTag;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.CatalogLoader;
 import org.apache.iceberg.flink.TableLoader;
 import org.apache.iceberg.flink.sink.FlinkSink;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.List;
 
-@ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
-public class DXSSink implements Sink<RowData>  {
-
-    private final ConfigApp configApp;
-    private final List<SplitContext<?>> splitContexts;
-    private final CatalogLoader catalogLoader;
-    private final OutputTag<RowData> discardTag;
+@RequiredArgsConstructor
+@Slf4j
+public class DXSSink implements Sink<RowData> {
 
     @Override
-    public void sink(SingleOutputStreamOperator<RowData> dataStream) {
+    @SuppressWarnings("unchecked")
+    public void sink(SingleOutputStreamOperator<RowData> dataStream, DXSContext dxsContext) {
+        OutputTag<RowData> discardTag = (OutputTag<RowData>) dxsContext.get(DiscardOutputTagProperty.DISCARD_OUTPUT_TAG).orElseThrow();
+        List<SplitContext<?>> splitContexts = (List<SplitContext<?>>) dxsContext.get(SplitContextListProperty.SPLIT_CONTEXT_LIST).orElseThrow();
+        CatalogLoader catalogLoader = (CatalogLoader) dxsContext.get(CatalogLoaderProperty.CATALOG_LOADER).orElseThrow();
         for (var context : splitContexts) {
-            DataStream<RowData> tableRowOutput = dataStream.getSideOutput(context.getOutputTag());
+            OutputTag<RowData> outputTag = context.getOutputTag();
+            DataStream<RowData> tableRowOutput = dataStream.getSideOutput(outputTag);
             FlinkSink
                     .forRowData(tableRowOutput)
                     .tableLoader(context.getTableLoader())
                     .upsert(true)
                     .equalityFieldColumns(context.getEqualityField())
-                    .writeParallelism(configApp.getFlinkConfig().getBaseParallelism())
+                    .writeParallelism(dxsContext.config().getFlinkConfig().getBaseParallelism())
                     .uidPrefix(context.getOutputTag().getId())
                     .append();
         }
         configureDiscardSink(
+                discardTag,
                 dataStream,
                 catalogLoader);
     }
 
     @Override
     public void onInit() {
-
+        log.info("Initializing DSX Sink");
     }
 
     private void configureDiscardSink(
+            OutputTag<RowData> discardTag,
             SingleOutputStreamOperator<RowData> stream,
             CatalogLoader catalogLoader) {
         TableLoader discardTableLoader =

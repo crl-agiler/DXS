@@ -3,10 +3,6 @@ package eu.unicredit.document.dxstraceinfo.kafka;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
@@ -14,6 +10,10 @@ import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDes
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class DxsKafkaSourceFactory {
 

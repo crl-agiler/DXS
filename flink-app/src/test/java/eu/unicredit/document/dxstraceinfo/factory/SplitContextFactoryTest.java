@@ -1,19 +1,21 @@
 package eu.unicredit.document.dxstraceinfo.factory;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-
 import eu.unicredit.document.dxstraceinfo.mapping.DocumentGroupRecordMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.DocumentMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.DossierMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.HistoryLogMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.SignerMapper;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
-import java.util.List;
 import org.apache.iceberg.flink.CatalogLoader;
 import org.junit.jupiter.api.Test;
+
+import java.io.Serializable;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 class SplitContextFactoryTest {
 
@@ -26,7 +28,7 @@ class SplitContextFactoryTest {
     SplitContextFactory factory =
         new SplitContextFactory(catalogLoader);
 
-    List<SplitContext<?>> contexts =
+    List<SplitContext<? extends Serializable>> contexts =
         factory.create();
 
     assertNotNull(contexts);
@@ -143,7 +145,7 @@ class SplitContextFactoryTest {
         context.getTableLoader());
   }
 
-  private List<SplitContext<?>> createContexts() {
+  private List<SplitContext<? extends Serializable>> createContexts() {
 
     CatalogLoader catalogLoader =
         mock(CatalogLoader.class);

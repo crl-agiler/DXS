@@ -1,35 +1,29 @@
-package eu.unicredit.document.dxstraceinfo;
+package eu.unicredit.document.dxstraceinfo.config;
 
+import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.FlinkConfiguration;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.config.ConfigFlink;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.io.InputStream;
 import java.util.Properties;
 
 import static org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.MINIMAL_CHECKPOINT_TIME;
 
-@ApplicationScoped
-@RequiredArgsConstructor(onConstructor_ = @Inject)
+
 @Slf4j
 public class DSXFlinkConfiguration implements FlinkConfiguration {
 
     private static final String DP_STORAGE_AREA_NAME = "dxs-traceinfo-gcs-storage-area";
-    private final ConfigApp appConfig;
-
     @Override
-    public void configure(StreamExecutionEnvironment env) throws Exception {
-        ConfigFlink flinkConfig = appConfig.getFlinkConfig();
-        ExecutionConfig config = env.getConfig();
+    public void configure(DXSContext context) throws Exception {
 
+        ConfigApp appConfig = context.config();
+        ConfigFlink flinkConfig = appConfig.getFlinkConfig();
+        ExecutionConfig config = context.streamingExecutionEnv().getConfig();
+        var env = context.streamingExecutionEnv();
         env.setParallelism(flinkConfig.getBaseParallelism());
 
         config.enableObjectReuse();

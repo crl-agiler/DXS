@@ -4,6 +4,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 
 public interface Processor<I, O> extends InitHook {
 
-    DataStream<O> process(DataStream<I> input);
+    DataStream<O> process(DataStream<I> input, DXSContext context);
 
 }

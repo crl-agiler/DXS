@@ -1,10 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.api;
 
 import lombok.Builder;
-
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 @Builder
 public class SingleSourceLogicPipeline<I, O> implements Pipeline {
@@ -13,8 +11,6 @@ public class SingleSourceLogicPipeline<I, O> implements Pipeline {
     private final Source<I> source;
     private final Processor<I, O> processor;
     private final Sink<O> sink;
-    @Builder.Default
-    private final FlinkConfiguration flinkConfiguration = FlinkConfiguration.NONE;
 
     @Override
     public String jobName() {
@@ -22,14 +18,13 @@ public class SingleSourceLogicPipeline<I, O> implements Pipeline {
     }
 
     @Override
-    public void run(StreamExecutionEnvironment streamExecutionEnvironment) throws Exception {
-        flinkConfiguration.configure(streamExecutionEnvironment);
+    public void run(DXSContext context) throws Exception {
         source.onInit();
         processor.onInit();
         sink.onInit();
-        DataStream<I> source = this.source.source(streamExecutionEnvironment);
-        DataStream<O> process = processor.process(source);
-        sink.sink((SingleOutputStreamOperator<O>) process);
-        streamExecutionEnvironment.execute(jobName());
+        DataStream<I> source = this.source.source(context);
+        DataStream<O> process = processor.process(source, context);
+        sink.sink((SingleOutputStreamOperator<O>) process, context);
+        context.streamingExecutionEnv().execute(jobName());
     }
 }

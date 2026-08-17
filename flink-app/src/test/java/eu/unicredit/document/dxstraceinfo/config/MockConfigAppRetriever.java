@@ -1,5 +1,6 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
+import eu.unicredit.document.dxstraceinfo.api.ConfigAppRetriever;
 import eu.unicredit.document.dxstraceinfo.tools.JavaUtils;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class MockConfigAppRetriever
   private final String envConfigPath;
 
   @Override
-  public ConfigApp getConfig() {
+  public ConfigApp getConfig(String... params) {
 
     final String pathPrefix =
         StringUtils.isNotBlank(bucket) ?

@@ -1,17 +1,18 @@
 package eu.unicredit.document.dxstraceinfo.it;
 
-import static org.instancio.Select.field;
-
 import eu.unicredit.document.dxstraceinfo.avro.Customer;
 import eu.unicredit.document.dxstraceinfo.avro.Document;
 import eu.unicredit.document.dxstraceinfo.avro.DocumentGroup;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.avro.Signer;
+import org.instancio.Instancio;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
-import org.instancio.Instancio;
+
+import static org.instancio.Select.field;
 
 public final class DossierGenerator {
 

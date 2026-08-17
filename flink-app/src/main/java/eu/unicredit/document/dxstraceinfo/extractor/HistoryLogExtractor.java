@@ -4,10 +4,11 @@ import eu.unicredit.document.dxstraceinfo.avro.Document;
 import eu.unicredit.document.dxstraceinfo.avro.DocumentGroup;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.model.HistoryLogRecord;
+import org.apache.flink.api.common.functions.MapFunction;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.flink.api.common.functions.MapFunction;
 
 public class HistoryLogExtractor
     implements MapFunction<DossierTraceinfoEvent, List<HistoryLogRecord>> {

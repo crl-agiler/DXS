@@ -7,14 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
-import java.io.Serializable;
-import java.util.List;
-import javax.validation.Valid;
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Configurations for {@code eu.unicredit.customers.yfareplatforming.App}.
@@ -27,7 +27,7 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonClassDescription("Configurations for `Flink job`")
 @JsonTypeName(ConfigApp.TYPE)
-public class ConfigApp implements Serializable, JakartaValidable {
+public class ConfigApp implements Serializable {
 
   /**
    * This fields embeds the type name of the serialized entity. Add a version semantic if needed.
@@ -80,13 +80,6 @@ public class ConfigApp implements Serializable, JakartaValidable {
   @JsonProperty(value = "debugMode", defaultValue = "false")
   @JsonPropertyDescription("Enable debug mode to help debugging a deployed App")
   boolean debugMode = false;
-
-
-  @JsonIgnore
-  @Override
-  public void validate() throws ValidationException {
-    ValidatorProxy.validate(this);
-  }
 
   @Override
   public String toString() {

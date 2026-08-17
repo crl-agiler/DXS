@@ -4,15 +4,14 @@ import eu.unicredit.document.dxstraceinfo.tools.GcpUtils;
 import eu.unicredit.document.dxstraceinfo.tools.JsonUtils;
 import eu.unicredit.document.dxstraceinfo.tools.ParsingException;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 
-@ApplicationScoped
 public class GcpCredentialsRetriever implements CredentialsRetriever {
 
   @Override
-  public Credentials getCredentials(String projectId, String secretId)
+  public Credentials getCredentials(String... params)
       throws IOException, MalformedCredentialsException {
+    String projectId = params[0], secretId = params[1];
     final String secretJson = GcpUtils.getSecret(projectId, secretId, "latest");
     try {
       return JsonUtils.fromJson(secretJson, Credentials.class);

@@ -10,15 +10,16 @@ import eu.unicredit.document.dxstraceinfo.mapping.DossierMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.HistoryLogMapper;
 import eu.unicredit.document.dxstraceinfo.mapping.SignerMapper;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Function;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.util.OutputTag;
 import org.apache.iceberg.catalog.TableIdentifier;
 import org.apache.iceberg.flink.CatalogLoader;
 import org.apache.iceberg.flink.TableLoader;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Function;
 
 public class SplitContextFactory implements Serializable {
 
@@ -30,7 +31,7 @@ public class SplitContextFactory implements Serializable {
     this.catalogLoader = catalogLoader;
   }
 
-  public List<SplitContext<?>> create() {
+  public List<SplitContext<? extends Serializable>> create() {
 
     Function<String, TableLoader> tableLoader =
         tableName -> TableLoader.fromCatalog(
