@@ -7,9 +7,6 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 
-import java.io.InputStream;
-import java.util.Properties;
-
 import static org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.MINIMAL_CHECKPOINT_TIME;
 
 
@@ -34,14 +31,8 @@ public class DSXFlinkConfiguration implements FlinkConfiguration {
             log.warn("Checkpoint disabled [{} < {}]", checkpointMs, MINIMAL_CHECKPOINT_TIME);
             return;
         }
-
-        InputStream is = this.getClass().getResourceAsStream("build.properties");
-        Properties properties = new Properties(3);
-        properties.load(is);
-        String version = properties.getProperty("version");
-        String major = version.split("\\.")[0];
-        String artifactId = properties.getProperty("artifactId");
-        String checkpointPath = String.format("gs://%s/%s/%s/%s/%s/checkpoints", appConfig.getBucketName(), major, DP_STORAGE_AREA_NAME, artifactId, version);
+        ArtifactInformation artifactInformation = context.artifactInformation();
+        String checkpointPath = String.format("gs://%s/%s/%s/%s/%s/checkpoints", appConfig.getBucketName(), artifactInformation.getMajor(), DP_STORAGE_AREA_NAME, artifactInformation.getArtifactName(), artifactInformation.getVersion());
 
         env.enableCheckpointing(checkpointMs);
 

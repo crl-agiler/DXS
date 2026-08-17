@@ -16,6 +16,7 @@ import org.apache.flink.table.data.RowData;
 import java.util.List;
 
 @Slf4j
+@SuppressWarnings("unchecked")
 public class DSXProcessor implements Processor<DossierTraceinfoEvent, RowData> {
 
     @Override

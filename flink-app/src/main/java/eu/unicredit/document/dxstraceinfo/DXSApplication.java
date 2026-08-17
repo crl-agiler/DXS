@@ -4,19 +4,23 @@ import eu.unicredit.document.dxstraceinfo.api.AdditionalContextProperty;
 import eu.unicredit.document.dxstraceinfo.api.Bootstrap;
 import eu.unicredit.document.dxstraceinfo.api.ConfigAppRetriever;
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
+import eu.unicredit.document.dxstraceinfo.api.DXSContextImpl;
 import eu.unicredit.document.dxstraceinfo.api.FlinkConfiguration;
 import eu.unicredit.document.dxstraceinfo.api.Pipeline;
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
+import eu.unicredit.document.dxstraceinfo.config.ArtifactInformation;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.context.DXSContextImpl;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import eu.unicredit.document.dxstraceinfo.credentials.CredentialsRetriever;
 import eu.unicredit.document.dxstraceinfo.parser.ArgsParser;
 import lombok.ToString;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 public class DXSApplication {
 
@@ -99,10 +103,22 @@ public class DXSApplication {
                         credentialsRetriever.getCredentials(
                                 projectId,
                                 secretId);
-                this.context = new DXSContextImpl(env, config, arguments, credentials);
+            ArtifactInformation artifactInformation = getArtifactInformation();
+                this.context = new DXSContextImpl(env, config, arguments, credentials, artifactInformation);
                 flinkConfiguration.configure(context);
                 this.additionalContextProperties.forEach(e -> context.add(e.name(), e.instance(context)));
             return new DXSApplication(this.pipeline, this.context);
+        }
+
+        private ArtifactInformation getArtifactInformation() throws IOException {
+            InputStream is = DXSApplication.class.getClassLoader()
+                    .getResourceAsStream("build.properties");
+            Properties properties = new Properties(3);
+            properties.load(is);
+            String version = properties.getProperty("version");
+            String major = version.split("\\.")[0];
+            String artifactId = properties.getProperty("artifactId");
+            return new ArtifactInformation(artifactId, version, major);
         }
     }
 }

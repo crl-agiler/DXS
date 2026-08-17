@@ -19,13 +19,13 @@ public class GcpConfigAppRetriever implements ConfigAppRetriever {
       String bucket = params[0];
       String baseConfigPath = params[1];
       String envConfigPath = params[2];
-    final String baseAppConfigAsYaml = GcsUtils.downloadFileFromGcsAsUtf8String(bucket, baseConfigPath);
-    LOG.info("Base config read from GCS: \n```\n{}\n```\n", baseAppConfigAsYaml);
-    final String envAppConfigAsYaml = GcsUtils.downloadFileFromGcsAsUtf8String(bucket, envConfigPath);
-    LOG.info("Environment config read from GCS: \n```\n{}\n```\n", envAppConfigAsYaml);
-    ConfigApp configApp = YamlUtils.merge(baseAppConfigAsYaml, envAppConfigAsYaml, ConfigApp.class);
-    ObjectValidator.getInstance().validate(configApp);
-    return configApp;
+      final String baseAppConfigAsYaml = GcsUtils.downloadFileFromGcsAsUtf8String(bucket, baseConfigPath);
+      LOG.info("Base config read from GCS: \n```\n{}\n```\n", baseAppConfigAsYaml);
+      final String envAppConfigAsYaml = GcsUtils.downloadFileFromGcsAsUtf8String(bucket, envConfigPath);
+      LOG.info("Environment config read from GCS: \n```\n{}\n```\n", envAppConfigAsYaml);
+      ConfigApp configApp = YamlUtils.merge(baseAppConfigAsYaml, envAppConfigAsYaml, ConfigApp.class);
+      ObjectValidator.getInstance().validate(configApp);
+      return configApp;
   }
 
 }

@@ -29,7 +29,6 @@
         <sonar.coverage.exclusions>**/tool/**/*.java,**/avro/*.java,**/SslTransportLayer.java
         </sonar.coverage.exclusions>
         <kafka.version>3.4.0</kafka.version>
-        <iceberg-flink-runtime-1.15.version>1.4.3</iceberg-flink-runtime-1.15.version>
         <hadoop.version>3.3.6</hadoop.version>
         <lombok.version>1.18.28</lombok.version>
         <jakarta.el.version>3.0.3</jakarta.el.version>
@@ -39,12 +38,12 @@
         <kafka-junit5.version>3.2.3</kafka-junit5.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <rewrite-maven-plugin.version>6.44.0</rewrite-maven-plugin.version>
-        <maven-shade-plugin.version>${maven-assembly-plugin.version}.1</maven-shade-plugin.version>
-        <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
+        <maven-shade-plugin.version>3.6.0</maven-shade-plugin.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <maven-checkstyle-plugin.version>3.5.0</maven-checkstyle-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
+        <iceberg-flink.version>1.4.3</iceberg-flink.version>
     </properties>
 
     <!--
@@ -295,8 +294,8 @@
 
         <dependency>
             <groupId>org.apache.iceberg</groupId>
-            <artifactId>iceberg-flink-runtime-1.15</artifactId>
-            <version>${iceberg-flink-runtime-1.15.version}</version>
+            <artifactId>iceberg-flink-1.15</artifactId>
+            <version>${iceberg-flink.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -520,6 +519,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-jar-with-dependencies.jar</outputFile>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
 
                                 <filter>
@@ -532,15 +533,20 @@
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                                <filter>
-                                    <artifact>
-                                        org.apache.iceberg:iceberg-flink-runtime-1.15
-                                    </artifact>
-                                    <excludes>
-                                        <exclude>com/github/luben/zstd/**</exclude>
-                                        <exclude>org/apache/yetus/audience/**</exclude>
+                                        <exclude>META-INF/LICENSE*</exclude>
+                                        <exclude>META-INF/NOTICE*</exclude>
+                                        <exclude>META-INF/maven/**</exclude>
+                                        <exclude>LICENSE</exclude>
+                                        <exclude>META-INF/*-LICENSE</exclude>
+                                        <exclude>META-INF/*-NOTICE</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                        <exclude>META-INF/DEPENDENCIES</exclude>
+                                        <exclude>META-INF/licenses-binary/*</exclude>
+                                        <exclude>META-INF/jersey-module-version</exclude>
+                                        <exclude>META-INF/proguard/*</exclude>
+                                        <exclude>mozilla/public-suffix-list.txt</exclude>
+                                        <exclude>META-INF/io.netty.versions.properties</exclude>
+                                        <exclude>iceberg-build.properties</exclude>
                                     </excludes>
                                 </filter>
                                 <filter>
@@ -563,36 +569,12 @@
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>eu.unicredit.document.dxstraceinfo.App</mainClass>
                                 </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>eu.unicredit.document.dxstraceinfo.App</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

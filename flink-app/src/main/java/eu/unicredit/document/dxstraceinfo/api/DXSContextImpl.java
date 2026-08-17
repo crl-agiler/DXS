@@ -1,7 +1,7 @@
-package eu.unicredit.document.dxstraceinfo.context;
+package eu.unicredit.document.dxstraceinfo.api;
 
-import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
+import eu.unicredit.document.dxstraceinfo.config.ArtifactInformation;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -16,13 +16,15 @@ public class DXSContextImpl implements DXSContext {
     private final ConfigApp config;
     private final AppCliArguments arguments;
     private final Credentials credentials;
+    private ArtifactInformation artifactInformation;
     private final Map<String, Object> context = new ConcurrentHashMap<>(4);
 
-    public DXSContextImpl(StreamExecutionEnvironment env, ConfigApp config, AppCliArguments arguments, Credentials credentials) {
+    public DXSContextImpl(StreamExecutionEnvironment env, ConfigApp config, AppCliArguments arguments, Credentials credentials, ArtifactInformation artifactInformation) {
         this.env = env;
         this.config = config;
         this.arguments = arguments;
         this.credentials = credentials;
+        this.artifactInformation = artifactInformation;
     }
 
     @Override
@@ -42,6 +44,11 @@ public class DXSContextImpl implements DXSContext {
 
     public Credentials credentials() {
         return credentials;
+    }
+
+    @Override
+    public ArtifactInformation artifactInformation() {
+        return this.artifactInformation;
     }
 
     @Override
