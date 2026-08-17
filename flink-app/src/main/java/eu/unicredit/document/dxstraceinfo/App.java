@@ -22,6 +22,7 @@ import java.util.List;
 
 public class App {
 
+    @VisibleForTesting
     public static List<AdditionalContextProperty> defaults() {
         return List.of(
                 new DiscardOutputTagProperty(),
@@ -52,6 +53,5 @@ public class App {
                 .pipeline(pipeline())
                 .bootstrap(args);
         dxsApplication.execute();
-
     }
 }

@@ -5,85 +5,82 @@ import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import eu.unicredit.document.dxstraceinfo.validation.ObjectValidator;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
 
 class GcpConfigAppRetrieverTest {
 
+    private final GcpConfigAppRetriever retriever = new GcpConfigAppRetriever();
+
     @Test
-    void shouldReadMergeValidateAndReturnConfig()
-            throws Exception {
+    void shouldThrowExceptionWhenParamsAreNull() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> retriever.getConfig((String[]) null)
+        );
 
-        String bucket = "bucket";
-        String basePath = "base.yml";
-        String envPath = "prod.yml";
+        assertEquals(
+                "Expected 3 parameters [bucket, baseConfigPath, envConfigPath]",
+                ex.getMessage()
+        );
+    }
 
-        String baseYaml = "base-config";
-        String envYaml = "env-config";
+    @Test
+    void shouldThrowExceptionWhenLessThanThreeParamsAreProvided() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> retriever.getConfig("bucket", "config.yaml")
+        );
 
-        ConfigApp expectedConfig = mock(ConfigApp.class);
-        ObjectValidator validator = mock(ObjectValidator.class);
+        assertEquals(
+                "Expected 3 parameters [bucket, baseConfigPath, envConfigPath]",
+                ex.getMessage()
+        );
+    }
 
-        try (MockedStatic<GcsUtils> gcsMock =
-                     mockStatic(GcsUtils.class);
-             MockedStatic<YamlUtils> yamlMock =
-                     mockStatic(YamlUtils.class);
-             MockedStatic<ObjectValidator> validatorMock =
-                     mockStatic(ObjectValidator.class)) {
+    @Test
+    void shouldLoadAndValidateConfiguration() throws Exception {
+
+        ConfigApp expectedConfig = Mockito.mock(ConfigApp.class);
+
+        try (MockedStatic<GcsUtils> gcsMock = mockStatic(GcsUtils.class);
+             MockedStatic<YamlUtils> yamlMock = mockStatic(YamlUtils.class);
+             MockedStatic<ObjectValidator> validatorMock = mockStatic(ObjectValidator.class)) {
+
+            ObjectValidator validator = mock(ObjectValidator.class);
 
             gcsMock.when(() ->
-                            GcsUtils.downloadFileFromGcsAsUtf8String(
-                                    bucket,
-                                    basePath))
-                    .thenReturn(baseYaml);
+                            GcsUtils.downloadFileFromGcsAsUtf8String("bucket", "base.yaml"))
+                    .thenReturn("baseYaml");
 
             gcsMock.when(() ->
-                            GcsUtils.downloadFileFromGcsAsUtf8String(
-                                    bucket,
-                                    envPath))
-                    .thenReturn(envYaml);
+                            GcsUtils.downloadFileFromGcsAsUtf8String("bucket", "env.yaml"))
+                    .thenReturn("envYaml");
 
             yamlMock.when(() ->
                             YamlUtils.merge(
-                                    baseYaml,
-                                    envYaml,
+                                    "baseYaml",
+                                    "envYaml",
                                     ConfigApp.class))
                     .thenReturn(expectedConfig);
 
             validatorMock.when(ObjectValidator::getInstance)
                     .thenReturn(validator);
 
-            GcpConfigAppRetriever retriever =
-                    new GcpConfigAppRetriever();
-
-            ConfigApp result =
-                    retriever.getConfig(
-                            bucket,
-                            basePath,
-                            envPath);
+            ConfigApp result = retriever.getConfig(
+                    "bucket",
+                    "base.yaml",
+                    "env.yaml"
+            );
 
             assertSame(expectedConfig, result);
 
-            gcsMock.verify(() ->
-                    GcsUtils.downloadFileFromGcsAsUtf8String(
-                            bucket,
-                            basePath));
-
-            gcsMock.verify(() ->
-                    GcsUtils.downloadFileFromGcsAsUtf8String(
-                            bucket,
-                            envPath));
-
-            yamlMock.verify(() ->
-                    YamlUtils.merge(
-                            baseYaml,
-                            envYaml,
-                            ConfigApp.class));
-
-            verify(validator).validate(expectedConfig);
+            Mockito.verify(validator).validate(expectedConfig);
         }
     }
 }

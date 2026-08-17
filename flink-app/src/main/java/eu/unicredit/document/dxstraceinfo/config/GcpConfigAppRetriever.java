@@ -5,6 +5,7 @@ import eu.unicredit.document.dxstraceinfo.tools.GcsUtils;
 import eu.unicredit.document.dxstraceinfo.tools.ParsingException;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import eu.unicredit.document.dxstraceinfo.validation.ObjectValidator;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,12 @@ public class GcpConfigAppRetriever implements ConfigAppRetriever {
 
     @Override
     public ConfigApp getConfig(String... params) throws ParsingException, ValidationException {
+      if (params == null || params.length < 3) {
+        throw new IllegalArgumentException(
+                "Expected 3 parameters [bucket, baseConfigPath, envConfigPath]"
+        );
+      }
+      LOG.info("Received params: {}", (Object) params);
       String bucket = params[0];
       String baseConfigPath = params[1];
       String envConfigPath = params[2];

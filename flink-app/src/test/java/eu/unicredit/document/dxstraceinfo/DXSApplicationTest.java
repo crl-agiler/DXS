@@ -6,7 +6,6 @@ import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.FlinkConfiguration;
 import eu.unicredit.document.dxstraceinfo.api.Pipeline;
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
-import eu.unicredit.document.dxstraceinfo.config.ArtifactInformation;
 import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.config.ConfigSchemaRegistry;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
@@ -21,75 +20,43 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class DXSApplicationTest {
 
     @Test
     void shouldCreateBuilder() {
-
-        assertNotNull(
-                DXSApplication.builder()
-        );
+        assertNotNull(DXSApplication.builder());
     }
 
     @Test
     void shouldExecutePipeline() throws Exception {
 
-        Pipeline pipeline =
-                mock(Pipeline.class);
-
-        DXSContext context =
-                mock(DXSContext.class);
+        Pipeline pipeline = mock(Pipeline.class);
+        DXSContext context = mock(DXSContext.class);
 
         DXSApplication application =
-                new DXSApplication(
-                        pipeline,
-                        context
-                );
+                new DXSApplication(pipeline, context);
 
         application.execute();
 
-        verify(pipeline)
-                .run(context);
+        verify(pipeline).run(context);
     }
 
     @Test
     void shouldBootstrapApplication() throws Exception {
 
-        Pipeline pipeline =
-                mock(Pipeline.class);
+        Pipeline pipeline = mock(Pipeline.class);
+        ArgsParser argsParser = mock(ArgsParser.class);
+        ConfigAppRetriever configRetriever = mock(ConfigAppRetriever.class);
+        CredentialsRetriever credentialsRetriever = mock(CredentialsRetriever.class);
+        FlinkConfiguration flinkConfiguration = mock(FlinkConfiguration.class);
+        AdditionalContextProperty property = mock(AdditionalContextProperty.class);
 
-        ArgsParser argsParser =
-                mock(ArgsParser.class);
-
-        ConfigAppRetriever configRetriever =
-                mock(ConfigAppRetriever.class);
-
-        CredentialsRetriever credentialsRetriever =
-                mock(CredentialsRetriever.class);
-
-        FlinkConfiguration flinkConfiguration =
-                mock(FlinkConfiguration.class);
-
-        AdditionalContextProperty property =
-                mock(AdditionalContextProperty.class);
-
-        AppCliArguments cliArguments =
-                mock(AppCliArguments.class);
-
-        ConfigApp config =
-                mock(ConfigApp.class);
-
-        ConfigSchemaRegistry schemaRegistryConfig =
-                mock(ConfigSchemaRegistry.class);
-
-        Credentials credentials =
-                mock(Credentials.class);
+        AppCliArguments cliArguments = mock(AppCliArguments.class);
+        ConfigApp config = mock(ConfigApp.class);
+        ConfigSchemaRegistry schemaRegistryConfig = mock(ConfigSchemaRegistry.class);
+        Credentials credentials = mock(Credentials.class);
 
         StreamExecutionEnvironment env =
                 mock(StreamExecutionEnvironment.class);
@@ -97,7 +64,19 @@ class DXSApplicationTest {
         when(argsParser.parse(any()))
                 .thenReturn(cliArguments);
 
-        when(configRetriever.getConfig())
+        when(cliArguments.getBucketName())
+                .thenReturn("bucket");
+
+        when(cliArguments.getBaseConfigPath())
+                .thenReturn("base");
+
+        when(cliArguments.getEnvConfigPath())
+                .thenReturn("env");
+
+        when(configRetriever.getConfig(
+                "bucket",
+                "base",
+                "env"))
                 .thenReturn(config);
 
         when(config.getProjectId())
@@ -106,12 +85,8 @@ class DXSApplicationTest {
         when(config.getSchemaRegistryConfig())
                 .thenReturn(schemaRegistryConfig);
 
-        schemaRegistryConfig.getClass()
-                .getMethod("getSecretId")
-                .invoke(
-                        doReturn("secret-id")
-                                .when(schemaRegistryConfig)
-                );
+        when(schemaRegistryConfig.getSecretId())
+                .thenReturn("secret-id");
 
         when(credentialsRetriever.getCredentials(
                 "test-project",
@@ -127,24 +102,17 @@ class DXSApplicationTest {
         try (MockedStatic<StreamExecutionEnvironment> mocked =
                      mockStatic(StreamExecutionEnvironment.class)) {
 
-            mocked.when(
-                            StreamExecutionEnvironment
-                                    ::getExecutionEnvironment)
+            mocked.when(StreamExecutionEnvironment::getExecutionEnvironment)
                     .thenReturn(env);
 
             DXSApplication application =
                     DXSApplication.builder()
                             .pipeline(pipeline)
                             .argsParser(argsParser)
-                            .configAppRetriever(
-                                    configRetriever)
-                            .credentialsRetriever(
-                                    credentialsRetriever)
-                            .flinkConfiguration(
-                                    flinkConfiguration)
-                            .additionalContextProperties(
-                                    List.of(property)
-                            )
+                            .configAppRetriever(configRetriever)
+                            .credentialsRetriever(credentialsRetriever)
+                            .flinkConfiguration(flinkConfiguration)
+                            .additionalContextProperties(List.of(property))
                             .bootstrap(
                                     new String[]{
                                             "--env",
@@ -154,11 +122,14 @@ class DXSApplicationTest {
 
             assertNotNull(application);
 
-            verify(argsParser)
-                    .parse(any());
+            verify(argsParser).parse(any());
 
             verify(configRetriever)
-                    .getConfig();
+                    .getConfig(
+                            "bucket",
+                            "base",
+                            "env"
+                    );
 
             verify(credentialsRetriever)
                     .getCredentials(
@@ -169,19 +140,15 @@ class DXSApplicationTest {
             verify(flinkConfiguration)
                     .configure(any());
 
-            verify(property)
-                    .name();
-
-            verify(property)
-                    .instance(any());
+            verify(property).name();
+            verify(property).instance(any());
         }
     }
 
     @Test
     void shouldSetContext() {
 
-        DXSContext context =
-                mock(DXSContext.class);
+        DXSContext context = mock(DXSContext.class);
 
         DXSApplication.DXSApplicationBuilder builder =
                 DXSApplication.builder()

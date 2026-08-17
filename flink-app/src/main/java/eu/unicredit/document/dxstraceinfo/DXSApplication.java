@@ -91,7 +91,10 @@ public class DXSApplication {
         @Override
         public DXSApplication bootstrap(String[] args) throws Exception {
                 AppCliArguments arguments = argsParser.parse(args);
-                ConfigApp config = configAppRetriever.getConfig();
+                ConfigApp config = configAppRetriever.getConfig(
+                        arguments.getBucketName(),
+                        arguments.getBaseConfigPath(),
+                        arguments.getEnvConfigPath());
                 StreamExecutionEnvironment env =
                         StreamExecutionEnvironment
                                 .getExecutionEnvironment();
