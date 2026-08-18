@@ -1,11 +1,11 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
 import eu.unicredit.document.dxstraceinfo.api.ConfigAppRetriever;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.tools.GcsUtils;
 import eu.unicredit.document.dxstraceinfo.tools.ParsingException;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import eu.unicredit.document.dxstraceinfo.validation.ObjectValidator;
-import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

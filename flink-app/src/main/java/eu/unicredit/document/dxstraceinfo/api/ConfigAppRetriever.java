@@ -1,6 +1,6 @@
 package eu.unicredit.document.dxstraceinfo.api;
 
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.tools.ParsingException;
 
 import javax.validation.ValidationException;

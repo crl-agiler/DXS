@@ -2,7 +2,7 @@ package eu.unicredit.document.dxstraceinfo.context;
 
 import eu.unicredit.document.dxstraceinfo.api.AdditionalContextProperty;
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
-import eu.unicredit.document.dxstraceinfo.config.ConfigIcebergCatalog;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigIcebergCatalog;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.iceberg.flink.CatalogLoader;
 

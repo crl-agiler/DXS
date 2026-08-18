@@ -1,8 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.kafka;
 
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigKafka;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
@@ -66,11 +66,12 @@ public class DxsKafkaSourceFactory {
         .setStartingOffsets(
             buildOffsetsInitializer(
                 kafkaConfig.getStartingOffset()))
-        .setValueOnlyDeserializer(
+        .setDeserializer(SafeKafkaDeserializer.of(
             ConfluentRegistryAvroDeserializationSchema.forSpecific(
                 DossierTraceinfoEvent.class,
                 schemaRegistryUrl,
                 srConfig))
+        )
         .setProperties(consumerProps)
         .build();
   }

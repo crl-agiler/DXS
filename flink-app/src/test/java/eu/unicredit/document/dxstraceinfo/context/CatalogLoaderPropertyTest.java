@@ -1,8 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.context;
 
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.config.ConfigIcebergCatalog;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigIcebergCatalog;
 import org.apache.iceberg.flink.CatalogLoader;
 import org.junit.jupiter.api.Test;
 

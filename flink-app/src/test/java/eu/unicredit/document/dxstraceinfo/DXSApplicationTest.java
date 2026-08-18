@@ -6,8 +6,8 @@ import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.FlinkConfiguration;
 import eu.unicredit.document.dxstraceinfo.api.Pipeline;
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.config.ConfigSchemaRegistry;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigSchemaRegistry;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import eu.unicredit.document.dxstraceinfo.credentials.CredentialsRetriever;
 import eu.unicredit.document.dxstraceinfo.parser.ArgsParser;
@@ -20,7 +20,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class DXSApplicationTest {
 

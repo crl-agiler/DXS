@@ -1,5 +1,6 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.tools.GcsUtils;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import eu.unicredit.document.dxstraceinfo.validation.ObjectValidator;

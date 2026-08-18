@@ -1,8 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.api;
 
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
-import eu.unicredit.document.dxstraceinfo.config.ArtifactInformation;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ArtifactInformation;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 

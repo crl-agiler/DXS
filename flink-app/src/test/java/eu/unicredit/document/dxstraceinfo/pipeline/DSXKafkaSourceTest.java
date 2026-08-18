@@ -2,7 +2,7 @@ package eu.unicredit.document.dxstraceinfo.pipeline;
 
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import eu.unicredit.document.dxstraceinfo.kafka.DxsKafkaSourceFactory;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;

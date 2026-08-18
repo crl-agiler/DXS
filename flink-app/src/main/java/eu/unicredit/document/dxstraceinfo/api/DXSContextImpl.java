@@ -1,8 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.api;
 
 import eu.unicredit.document.dxstraceinfo.config.AppCliArguments;
-import eu.unicredit.document.dxstraceinfo.config.ArtifactInformation;
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ArtifactInformation;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -16,7 +16,7 @@ public class DXSContextImpl implements DXSContext {
     private final ConfigApp config;
     private final AppCliArguments arguments;
     private final Credentials credentials;
-    private ArtifactInformation artifactInformation;
+    private final ArtifactInformation artifactInformation;
     private final Map<String, Object> context = new ConcurrentHashMap<>(4);
 
     public DXSContextImpl(StreamExecutionEnvironment env, ConfigApp config, AppCliArguments arguments, Credentials credentials, ArtifactInformation artifactInformation) {

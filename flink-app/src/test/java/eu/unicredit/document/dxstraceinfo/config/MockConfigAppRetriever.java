@@ -1,6 +1,7 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
 import eu.unicredit.document.dxstraceinfo.api.ConfigAppRetriever;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
 import eu.unicredit.document.dxstraceinfo.tools.JavaUtils;
 import eu.unicredit.document.dxstraceinfo.tools.YamlUtils;
 import lombok.Builder;

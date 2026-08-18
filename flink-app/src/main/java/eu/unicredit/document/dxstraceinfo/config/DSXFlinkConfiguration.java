@@ -2,6 +2,9 @@ package eu.unicredit.document.dxstraceinfo.config;
 
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.FlinkConfiguration;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ArtifactInformation;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigFlink;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.streaming.api.CheckpointingMode;

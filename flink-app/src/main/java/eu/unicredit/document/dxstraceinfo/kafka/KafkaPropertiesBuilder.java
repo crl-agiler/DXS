@@ -1,8 +1,8 @@
 package eu.unicredit.document.dxstraceinfo.kafka;
 
-import eu.unicredit.document.dxstraceinfo.config.ConfigApp;
-import eu.unicredit.document.dxstraceinfo.config.ConfigKafka;
-import eu.unicredit.document.dxstraceinfo.config.ConfigSchemaRegistry;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigApp;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigKafka;
+import eu.unicredit.document.dxstraceinfo.config.pojo.ConfigSchemaRegistry;
 import eu.unicredit.document.dxstraceinfo.credentials.Credentials;
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;

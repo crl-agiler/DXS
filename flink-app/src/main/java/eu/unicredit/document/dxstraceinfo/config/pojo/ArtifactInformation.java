@@ -1,4 +1,4 @@
-package eu.unicredit.document.dxstraceinfo.config;
+package eu.unicredit.document.dxstraceinfo.config.pojo;
 
 import lombok.Value;
 

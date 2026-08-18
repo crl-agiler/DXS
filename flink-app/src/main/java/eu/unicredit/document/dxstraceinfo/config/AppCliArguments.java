@@ -1,14 +1,10 @@
 package eu.unicredit.document.dxstraceinfo.config;
 
 import com.beust.jcommander.Parameter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@ToString
-@EqualsAndHashCode
-public class AppCliArguments {
+@Data
+public final class AppCliArguments {
 
   @Parameter(names = {"-b", "--bucketName"},
       description = "GCS bucket name", required = true)
