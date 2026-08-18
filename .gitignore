@@ -16,3 +16,4 @@ flink-app/src/main/java/eu/unicredit/document/dxstraceinfo/avro/Document.java
 flink-app/src/main/java/eu/unicredit/document/dxstraceinfo/avro/DocumentGroup.java
 flink-app/src/main/java/eu/unicredit/document/dxstraceinfo/avro/DossierTraceinfoEvent.java
 flink-app/src/main/java/eu/unicredit/document/dxstraceinfo/avro/Signer.java
+**/*.log
