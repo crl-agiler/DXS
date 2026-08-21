@@ -4,7 +4,9 @@
   "eventTimestamp": 1735725600000,
   "dossierId": 100,
   "applicationCode": "APP",
-  "selectedProcessType": "DIGITAL",
+  "selectedProcessType": {
+    "string": "PAPER"
+  },
   "reprint": "N",
   "exeApp": "EXE",
   "correlationKey": "CORR-001",
