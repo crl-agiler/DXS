@@ -31,6 +31,7 @@ spec:
     useCaseTemplateId: urn:dmb:utm:gcp-workload-dataproc-flink-template:0.0.0
     dependsOn:
       - urn:dmb:cmp:documental:dxs_traceinfo:0:dxs-traceinfo-flink-cluster
+      - urn:dmb:cmp:documental:dxs_traceinfo:0:dxs-traceinfo-dremio-storage-area
     platform: DataProc
     technology: flink
     workloadType: FULL
