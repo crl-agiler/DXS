@@ -88,11 +88,11 @@
       "documents": [
         {
           "id": 300,
-          "code": "DOC01",
-          "status": "ARCHIVED",
-          "categoryCode": "CAT",
-          "productName": "PRODUCT",
-          "processCode": "PROC",
+          "code": {"string": "DOC01"},
+          "status": {"string": "ARCHIVED"},
+          "categoryCode": {"string": "CAT"},
+          "productName": {"string": "PRODUCT"},
+          "processCode": {"string": "PROC"},
           "processType": {
             "string": "DIGITAL"
           },

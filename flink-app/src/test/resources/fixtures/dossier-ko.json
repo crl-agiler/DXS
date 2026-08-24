@@ -70,11 +70,11 @@
       "documents": [
         {
           "id": 301,
-          "code": "DOC02",
-          "status": "CANCELLED",
-          "categoryCode": "CAT",
-          "productName": "PRODUCT",
-          "processCode": "PROC",
+          "code": {"string": "DOC02"},
+          "status": {"string": "CANCELLED"},
+          "categoryCode": {"string": "CAT"},
+          "productName": {"string": "PRODUCT"},
+          "processCode": {"string": "PROC"},
           "processType": null,
           "size": null,
           "controlsOutcomePec": null,

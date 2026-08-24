@@ -55,7 +55,7 @@
         "string": "DIGI004"
       },
       "envelopeId": {
-        "string": "ENV004"
+        "string": "ENV004",
       },
       "status": "ARCHIVED",
       "creationDate": 1735725600000,

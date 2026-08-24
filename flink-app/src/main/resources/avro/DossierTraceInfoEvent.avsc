@@ -342,27 +342,47 @@
                     },
                     {
                       "name": "code",
-                      "type": "string",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
                       "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
                     },
                     {
                       "name": "status",
-                      "type": "string",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
                       "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVED_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED)$\")"
                     },
                     {
                       "name": "categoryCode",
-                      "type": "string",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
                       "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
                     },
                     {
                       "name": "productName",
-                      "type": "string",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
                       "javaAnnotation": "javax.validation.constraints.NotBlank"
                     },
                     {
                       "name": "processCode",
-                      "type": "string",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
                       "javaAnnotation": "javax.validation.constraints.NotBlank"
                     },
                     {
