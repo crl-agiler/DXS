@@ -36,7 +36,8 @@ spec:
     technology: flink
     workloadType: FULL
     connectionType: HouseKeeping
-    readsFrom: [ ]
+    readsFrom:
+      - urn:dmb:cmp:source-systems:kafka-source-system:0:kafka-dxs
     specific:
       artifact:
         name: dxs-traceinfo-flink-streaming-wl
