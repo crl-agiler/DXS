@@ -185,8 +185,8 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
     for (; i < arity; i++) {
       genericRowData.setField(i, basicRowData.getField(i));
     }
-    genericRowData.setField(i, eventTimestamp);
-    genericRowData.setField(++i, processingTimestamp);
+    genericRowData.setField(i, processingTimestamp);
+    genericRowData.setField(++i, eventTimestamp);
     return genericRowData;
   }
 
