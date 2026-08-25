@@ -2,13 +2,16 @@ package eu.unicredit.document.dxstraceinfo.transform;
 
 import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
+import eu.unicredit.document.dxstraceinfo.mapping.AvroRowDataConverters;
 import eu.unicredit.document.dxstraceinfo.tools.JsonUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
+import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
+import org.apache.flink.table.data.TimestampData;
 import org.apache.flink.util.Collector;
 import org.apache.flink.util.OutputTag;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -164,12 +168,26 @@ public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTra
 
     OutputTag<RowData> outputTag =
         splitContext.getOutputTag();
-
+    TimestampData eventTimestamp = AvroRowDataConverters.timestamp(event.getEventTimestamp());
+    TimestampData processingTimestamp = AvroRowDataConverters.timestamp(Instant.now());
     for (T object : objects) {
-      context.output(
-          outputTag,
-          mapper.map(object));
+      GenericRowData basicRowData = (GenericRowData) mapper.map(object);
+      GenericRowData map = enrichRowData(basicRowData, eventTimestamp, processingTimestamp);
+      context.output(outputTag, map);
     }
+  }
+
+
+  private GenericRowData enrichRowData(GenericRowData basicRowData, TimestampData eventTimestamp, TimestampData processingTimestamp) {
+    int arity = basicRowData.getArity();
+    GenericRowData genericRowData = new GenericRowData(arity + 2);
+    int i = 0;
+    for (; i < arity; i++) {
+      genericRowData.setField(i, basicRowData.getField(i));
+    }
+    genericRowData.setField(i, eventTimestamp);
+    genericRowData.setField(++i, processingTimestamp);
+    return genericRowData;
   }
 
   /**
