@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * <p>If extraction or mapping fails, the event is written once to the discard side output with a
  * structured JSON error.
  */
-public class SplitTransformLogic extends KeyedProcessFunction<String, DossierTraceinfoEvent, RowData> {
+public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTraceinfoEvent, RowData> {
 
   private static final Logger LOGGER =
       LoggerFactory.getLogger(SplitTransformLogic.class);

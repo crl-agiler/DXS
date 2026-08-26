@@ -4,10 +4,10 @@ import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.api.Processor;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import eu.unicredit.document.dxstraceinfo.transform.SplitTransformLogic;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -23,10 +23,9 @@ public class DSXProcessor implements Processor<DossierTraceinfoEvent, RowData> {
     public DataStream<RowData> process(DataStream<DossierTraceinfoEvent> input, DXSContext context) {
         ErrorHandler<DossierTraceinfoEvent> errorHandler = (ErrorHandler<DossierTraceinfoEvent>) context.get("ErrorHandler").orElseThrow();
         List<SplitContext<?>> splitContexts = (List<SplitContext<?>>) context.get("SplitContextList").orElseThrow();
-        PreKeyFilterProcess dossierIdNotNullProcess = new PreKeyFilterProcess(errorHandler);
         SplitTransformLogic splitTransformLogic = new SplitTransformLogic(splitContexts, errorHandler);
-        SingleOutputStreamOperator<DossierTraceinfoEvent> process = input.process(dossierIdNotNullProcess);
-        KeyedStream<DossierTraceinfoEvent, String> dossierTraceinfoEventStringKeyedStream = process.keyBy(DossierTraceinfoEvent::getMasterDossierId);
+        KeySelector<DossierTraceinfoEvent, Long> getDossierId = DossierTraceinfoEvent::getDossierId;
+        KeyedStream<DossierTraceinfoEvent, Long> dossierTraceinfoEventStringKeyedStream = input.keyBy(getDossierId);
         SingleOutputStreamOperator<RowData> outputStreamOperator = dossierTraceinfoEventStringKeyedStream.process(splitTransformLogic);
         return outputStreamOperator.name("SplitTransformLogic").uid("transform-transform-logic");
     }

@@ -3,7 +3,6 @@ package eu.unicredit.document.dxstraceinfo.pipeline;
 import eu.unicredit.document.dxstraceinfo.api.DXSContext;
 import eu.unicredit.document.dxstraceinfo.api.ErrorHandler;
 import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
-import eu.unicredit.document.dxstraceinfo.transform.PreKeyFilterProcess;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import eu.unicredit.document.dxstraceinfo.transform.SplitTransformLogic;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -50,11 +49,7 @@ class DSXProcessorTest {
         DataStream<DossierTraceinfoEvent> input =
                 mock(DataStream.class);
 
-        SingleOutputStreamOperator<DossierTraceinfoEvent>
-                filtered =
-                mock(SingleOutputStreamOperator.class);
-
-        KeyedStream<DossierTraceinfoEvent, String>
+        KeyedStream<DossierTraceinfoEvent, Long>
                 keyed =
                 mock(KeyedStream.class);
 
@@ -72,11 +67,7 @@ class DSXProcessorTest {
         when(context.get("SplitContextList"))
                 .thenReturn(Optional.of(splitContexts));
 
-        when(input.process(
-                any(PreKeyFilterProcess.class)))
-                .thenAnswer(invocation -> filtered);
-
-        when(filtered.keyBy(any(org.apache.flink.api.java.functions.KeySelector.class)))
+        when(input.keyBy(any(org.apache.flink.api.java.functions.KeySelector.class)))
         .thenReturn(keyed);
 
         when(keyed.process(
@@ -107,11 +98,6 @@ class DSXProcessorTest {
                 .get("SplitContextList");
 
         verify(input)
-                .process(
-                        any(PreKeyFilterProcess.class)
-                );
-
-        verify(filtered)
                 .keyBy(any(KeySelector.class));
 
         verify(keyed)
