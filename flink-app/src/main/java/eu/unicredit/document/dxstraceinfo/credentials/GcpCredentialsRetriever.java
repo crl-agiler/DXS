@@ -11,6 +11,10 @@ public class GcpCredentialsRetriever implements CredentialsRetriever {
   @Override
   public Credentials getCredentials(String... params)
       throws IOException, MalformedCredentialsException {
+    if(params == null || params.length < 2) {
+      throw new IllegalArgumentException("\"params\" is null or does not contains minimum required" +
+              " properties \"projectId\" and \"secretId\"");
+    }
     String projectId = params[0], secretId = params[1];
     final String secretJson = GcpUtils.getSecret(projectId, secretId, "latest");
     try {

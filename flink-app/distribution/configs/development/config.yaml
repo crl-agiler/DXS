@@ -5,6 +5,7 @@ kafka:
   topic: "DXSUIWWDPUSIT"
   consumerGroupId: "DXS01DXSUIWWDPUSIT"
   ldapGroup: "JUIDXSDPU_CKFDR"
+  startingOffset: "earliest"
   partitions: 3
 
 schemaRegistry:

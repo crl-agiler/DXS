@@ -392,7 +392,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|BRANCH_INDIVIDUALS)?$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|ARCHIVE)?$\")"
                     },
                     {
                       "name": "size",
