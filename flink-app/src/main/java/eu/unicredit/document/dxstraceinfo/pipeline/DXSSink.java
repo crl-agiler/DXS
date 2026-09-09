@@ -32,12 +32,15 @@ public class DXSSink implements Sink<RowData> {
         for (var context : splitContexts) {
             OutputTag<RowData> outputTag = context.getOutputTag();
             DataStream<RowData> tableRowOutput = dataStream.getSideOutput(outputTag);
-            FlinkSink
+            FlinkSink.Builder flinkSinkBuilder = FlinkSink
                     .forRowData(tableRowOutput)
                     .tableLoader(context.getTableLoader())
-                    .upsert(true)
-                    .equalityFieldColumns(context.getEqualityField())
-                    .writeParallelism(dxsContext.config().getFlinkConfig().getBaseParallelism())
+                    .upsert(context.isUpsert());
+            if (context.isUpsert()) {
+                flinkSinkBuilder = flinkSinkBuilder
+                        .equalityFieldColumns(context.getEqualityField());
+            }
+            flinkSinkBuilder.writeParallelism(dxsContext.config().getFlinkConfig().getBaseParallelism())
                     .uidPrefix(context.getOutputTag().getId())
                     .append();
         }

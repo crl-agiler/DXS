@@ -61,6 +61,8 @@ public class SplitContext<T> implements Serializable {
    */
   private final List<String> equalityField;
 
+  private boolean upsert = true;
+
   /**
    * Creates a new {@code SplitContext}.
    *
@@ -69,19 +71,50 @@ public class SplitContext<T> implements Serializable {
    * @param outputTag     side output destination for mapped records
    * @param tableLoader   Iceberg table loader associated with the output
    * @param equalityField list of equality fields used by Iceberg
+   * @param upsert should perform the upsert
    */
   private SplitContext(
       MapFunction<DossierTraceinfoEvent, List<T>> extractor,
       MapFunction<T, RowData> mapper,
       OutputTag<RowData> outputTag,
       TableLoader tableLoader,
-      List<String> equalityField) {
+      List<String> equalityField,
+      boolean upsert) {
 
     this.extractor = extractor;
     this.mapper = mapper;
     this.outputTag = outputTag;
     this.tableLoader = tableLoader;
     this.equalityField = equalityField;
+    this.upsert = upsert;
+  }
+
+  /**
+   * Creates a new {@code SplitContext} instance.
+   *
+   * @param extractor    extracts a list of objects from the source event
+   * @param mapper       converts extracted objects into {@link RowData}
+   * @param outputTag    side output tag receiving the produced records
+   * @param tableLoader  Iceberg table loader associated with the output
+   * @param equityFields equality fields used for Iceberg write operations
+   * @param upsert       upsert used by Iceberg sink
+   * @param <X>          type of extracted objects
+   * @return a fully configured {@code SplitContext}
+   */
+  public static <X extends Serializable> SplitContext<X> of(
+      MapFunction<DossierTraceinfoEvent, List<X>> extractor,
+      MapFunction<X, RowData> mapper,
+      OutputTag<RowData> outputTag,
+      TableLoader tableLoader,
+      List<String> equityFields,
+      boolean upsert) {
+
+    return new SplitContext<>(
+        extractor,
+        mapper,
+        outputTag,
+        tableLoader,
+        equityFields, upsert);
   }
 
   /**
@@ -96,17 +129,18 @@ public class SplitContext<T> implements Serializable {
    * @return a fully configured {@code SplitContext}
    */
   public static <X extends Serializable> SplitContext<X> of(
-      MapFunction<DossierTraceinfoEvent, List<X>> extractor,
-      MapFunction<X, RowData> mapper,
-      OutputTag<RowData> outputTag,
-      TableLoader tableLoader,
-      List<String> equityFields) {
+          MapFunction<DossierTraceinfoEvent, List<X>> extractor,
+          MapFunction<X, RowData> mapper,
+          OutputTag<RowData> outputTag,
+          TableLoader tableLoader,
+          List<String> equityFields) {
 
     return new SplitContext<>(
-        extractor,
-        mapper,
-        outputTag,
-        tableLoader,
-        equityFields);
+            extractor,
+            mapper,
+            outputTag,
+            tableLoader,
+            equityFields,
+            true);
   }
 }
