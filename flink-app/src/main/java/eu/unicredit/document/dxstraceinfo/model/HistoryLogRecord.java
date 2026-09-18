@@ -11,7 +11,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryLogRecord implements Serializable {
-  private Long historyLogId;
+  private String historyLogId;
   private Long levelIdIdentifier;
   private String status;
   private String subStatus;

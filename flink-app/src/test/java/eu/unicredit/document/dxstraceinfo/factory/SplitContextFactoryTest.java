@@ -10,7 +10,6 @@ import org.apache.iceberg.flink.CatalogLoader;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -139,7 +138,7 @@ class SplitContextFactoryTest {
         context.getMapper());
 
     assertEquals(
-            Collections.emptyList(),
+            List.of("history_log_id"),
         context.getEqualityField());
 
     assertNotNull(

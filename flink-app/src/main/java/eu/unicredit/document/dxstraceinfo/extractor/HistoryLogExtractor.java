@@ -6,7 +6,6 @@ import eu.unicredit.document.dxstraceinfo.avro.DossierTraceinfoEvent;
 import eu.unicredit.document.dxstraceinfo.model.HistoryLogRecord;
 import org.apache.flink.api.common.functions.MapFunction;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +16,9 @@ public class HistoryLogExtractor
   public List<HistoryLogRecord> map(DossierTraceinfoEvent event) {
 
     List<HistoryLogRecord> records = new ArrayList<>();
-
     records.add(
         new HistoryLogRecord(
-            nextHistoryId(event.getDossierId()),
+            String.valueOf(event.getDossierId()),
             event.getDossierId(),
             event.getStatus(),
             event.getSubStatus(),
@@ -28,12 +26,11 @@ public class HistoryLogExtractor
             "DOSSIER"
         )
     );
-
     for (DocumentGroup group : event.getDocumentGroups()) {
 
       records.add(
           new HistoryLogRecord(
-              nextHistoryId(group.getId()),
+                  event.getDossierId() + "-" + group.getId(),
               group.getId(),
               group.getStatus(),
               null,
@@ -46,7 +43,7 @@ public class HistoryLogExtractor
 
         records.add(
             new HistoryLogRecord(
-                nextHistoryId(document.getId()),
+                    event.getDossierId() + "-" + document.getId(),
                 document.getId(),
                 document.getStatus(),
                 null,
@@ -58,9 +55,5 @@ public class HistoryLogExtractor
     }
 
     return records;
-  }
-
-  private long nextHistoryId(long entityId) {
-    return Instant.now().toEpochMilli() * 100000L + (entityId % 100000L);
   }
 }
