@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "DossierTraceinfoEvent",
-  "namespace": "eu.unicredit.dxs",
+  "namespace": "eu.unicredit.document.dxstraceinfo.avro",
   "fields": [
     {
       "name": "uuid",
