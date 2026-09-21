@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "DossierTraceinfoEvent",
-  "namespace": "eu.unicredit.document.dxstraceinfo.avro",
+  "namespace": "eu.unicredit.dxs",
   "fields": [
     {
       "name": "uuid",
@@ -356,7 +356,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVE_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED)$\")"
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVE_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED|UPLOAD_SKIPPED)$\")"
                     },
                     {
                       "name": "categoryCode",
@@ -392,7 +392,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|BRANCH_INDIVIDUALS)?$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(ARCHIVE|PAPER|PEC|SIGN|UPLOAD)?$\")"
                     },
                     {
                       "name": "size",
@@ -410,7 +410,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[^|]+\\\\|\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}(?:\\\\.\\\\d{1,9})?(?:Z|[+-]\\\\d{2}:\\\\d{2})\\\\|[^|]+\\\\|[^|]+$\")"
                     },
                     {
                       "name": "signatureTypePec",
