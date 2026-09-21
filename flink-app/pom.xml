@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.unicredit</groupId>
     <artifactId>dxs-traceinfo-flink-streaming-wl</artifactId>
-    <version>0.0.44</version>
+    <version>0.0.45</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,6 +43,7 @@
         <jakarta.activation-api.version>1.2.2</jakarta.activation-api.version>
         <iceberg-flink.version>1.4.3</iceberg-flink.version>
         <maven-resources-plugin.version>3.5.0</maven-resources-plugin.version>
+        <kafka-clients.version>3.1.2</kafka-clients.version>
     </properties>
 
     <!--
@@ -183,10 +184,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${kafka-clients.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka</artifactId>
             <version>${flink.version}</version>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.kafka</groupId>
+                    <artifactId>kafka-clients</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
