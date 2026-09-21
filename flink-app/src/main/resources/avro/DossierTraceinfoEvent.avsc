@@ -1,0 +1,555 @@
+{
+  "type": "record",
+  "name": "DossierTraceinfoEvent",
+  "namespace": "eu.unicredit.document.dxstraceinfo.avro",
+  "fields": [
+    {
+      "name": "uuid",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.NotBlank"
+    },
+    {
+      "name": "eventType",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.NotBlank"
+    },
+    {
+      "name": "eventTimestamp",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "dossierId",
+      "type": "long",
+      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
+    },
+    {
+      "name": "applicationCode",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Za-z0-9_]+$\")"
+    },
+    {
+      "name": "selectedProcessType",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(PAPER|PEC|BRANCH_INDIVIDUALS|DIGITAL)$\")"
+    },
+    {
+      "name": "reprint",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
+    },
+    {
+      "name": "exeApp",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Za-z0-9_]+$\")"
+    },
+    {
+      "name": "correlationKey",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Za-z0-9_.:-]+$\")"
+    },
+    {
+      "name": "author",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.NotBlank"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DRAFT|DRAFT_PEC|PROCESSING|RETRY_ON_PROCESS|PEC_PROCESSING|TO_BE_ACCEPTED|TO_BE_CLOSED|EXPIRED|CANCELLED|CONCLUDED|CLOSED)$\")"
+    },
+    {
+      "name": "subStatus",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable"
+    },
+    {
+      "name": "branch",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[0-9]{5}$\")"
+    },
+    {
+      "name": "paperReason",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(FORCED_BY_VERTICAL|SELECTED_BY_USER|)$\")"
+    },
+    {
+      "name": "practiceId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable"
+    },
+    {
+      "name": "pecFlow",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(B2C|C2B)$\")"
+    },
+    {
+      "name": "bankCode",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[0-9]{5}$\")"
+    },
+    {
+      "name": "relatedDossier",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable"
+    },
+    {
+      "name": "masterDossierId",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+    },
+    {
+      "name": "motivation",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable"
+    },
+    {
+      "name": "dossierType",
+      "type": "string",
+      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(ENTERPRISE|UCX)$\")"
+    },
+    {
+      "name": "referenceBranchPec",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[0-9]{5}$\")"
+    },
+    {
+      "name": "legalEntity",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable"
+    },
+    {
+      "name": "flowType",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(PF|PG)$\")"
+    },
+    {
+      "name": "creationDate",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "endDate",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "customers",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Customer",
+          "fields": [
+            {
+              "name": "ndg",
+              "type": "string",
+              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+            },
+            {
+              "name": "selectedChannels",
+              "type": "string",
+              "javaAnnotation": "javax.validation.constraints.NotBlank"
+            }
+          ]
+        }
+      },
+      "javaAnnotation": "javax.validation.Valid"
+    },
+    {
+      "name": "documentGroups",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "DocumentGroup",
+          "fields": [
+            {
+              "name": "id",
+              "type": "long",
+              "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
+            },
+            {
+              "name": "digilayerId",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null,
+              "javaAnnotation": "javax.annotation.Nullable"
+            },
+            {
+              "name": "envelopeId",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null,
+              "javaAnnotation": "javax.annotation.Nullable"
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DRAFT|DISABLED|LOCKED|READY|PROCESSING_PARTIALLY_SIGNED|TO_BE_ARCHIVED|TO_BE_CONFIRMED|PROCESSING|UPLOADED|TO_BE_PRINTED|PRINTED|CANCELLED|CANCELLED_ARCHIVED|CANCELLED_CREATED|CANCELLED_DRAFT|CANCELLED_LOCKED|CANCELLED_SENT|ARCHIVED|AUTOMATIC_ARCHIVED|CLOSED|EXPIRED|ERROR_SIGNAL|TO_BE_UPLOADED|TO_BE_ACKNOWLEDGED|ARCHIVED_CANCELED|SIGNED|HIDDEN)$\")"
+            },
+            {
+              "name": "creationDate",
+              "type": {
+                "type": "long",
+                "logicalType": "timestamp-millis"
+              }
+            },
+            {
+              "name": "endDate",
+              "type": {
+                "type": "long",
+                "logicalType": "timestamp-millis"
+              }
+            },
+            {
+              "name": "signers",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Signer",
+                  "fields": [
+                    {
+                      "name": "id",
+                      "type": "long",
+                      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
+                    },
+                    {
+                      "name": "ndg",
+                      "type": "string",
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+                    },
+                    {
+                      "name": "mfaMethod",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+                    },
+                    {
+                      "name": "authenticationId",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^.+$\")"
+                    },
+                    {
+                      "name": "signerReb",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+                    },
+                    {
+                      "name": "signatureChannel",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+                    },
+                    {
+                      "name": "signatureDate",
+                      "type": {
+                        "type": "long",
+                        "logicalType": "timestamp-millis"
+                      }
+                    }
+                  ]
+                }
+              },
+              "javaAnnotation": "javax.validation.Valid"
+            },
+            {
+              "name": "documents",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Document",
+                  "fields": [
+                    {
+                      "name": "id",
+                      "type": "long",
+                      "javaAnnotation": "javax.validation.constraints.PositiveOrZero"
+                    },
+                    {
+                      "name": "code",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Za-z][A-Za-z0-9_]*$\")"
+                    },
+                    {
+                      "name": "status",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVE_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED)$\")"
+                    },
+                    {
+                      "name": "categoryCode",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+                    },
+                    {
+                      "name": "productName",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.validation.constraints.NotBlank"
+                    },
+                    {
+                      "name": "processCode",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.validation.constraints.NotBlank"
+                    },
+                    {
+                      "name": "processType",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|BRANCH_INDIVIDUALS)?$\")"
+                    },
+                    {
+                      "name": "size",
+                      "type": [
+                        "null",
+                        "long"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.PositiveOrZero"
+                    },
+                    {
+                      "name": "controlsOutcomePec",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable"
+                    },
+                    {
+                      "name": "signatureTypePec",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+                    },
+                    {
+                      "name": "certificateAuthorityPec",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable"
+                    },
+                    {
+                      "name": "signaturePointTimestampPec",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}(?:\\\\.\\\\d{1,9})?(?:Z|[+-]\\\\d{2}:\\\\d{2})$\")"
+                    },
+                    {
+                      "name": "accessibility",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
+                    },
+                    {
+                      "name": "archiveLink",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^\\\\./[A-Za-z0-9._/-]*$\")"
+                    },
+                    {
+                      "name": "numberOfPages",
+                      "type": [
+                        "null",
+                        "long"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.PositiveOrZero"
+                    },
+                    {
+                      "name": "accountNumber",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+                    },
+                    {
+                      "name": "documentDescription",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable"
+                    },
+                    {
+                      "name": "signatureType",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+                    },
+                    {
+                      "name": "digitalization",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(Y|N)?$\")"
+                    },
+                    {
+                      "name": "datamatrix",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable"
+                    },
+                    {
+                      "name": "signatureBoxOrder",
+                      "type": [
+                        "null",
+                        "string"
+                      ],
+                      "default": null,
+                      "javaAnnotation": "javax.annotation.Nullable"
+                    },
+                    {
+                      "name": "creationDate",
+                      "type": {
+                        "type": "long",
+                        "logicalType": "timestamp-millis"
+                      }
+                    },
+                    {
+                      "name": "endDate",
+                      "type": {
+                        "type": "long",
+                        "logicalType": "timestamp-millis"
+                      }
+                    },
+                    {
+                      "name": "signatureDate",
+                      "type": {
+                        "type": "long",
+                        "logicalType": "timestamp-millis"
+                      }
+                    }
+                  ]
+                }
+              },
+              "javaAnnotation": "javax.validation.Valid"
+            }
+          ]
+        }
+      },
+      "javaAnnotation": "javax.validation.Valid"
+    }
+  ]
+}
