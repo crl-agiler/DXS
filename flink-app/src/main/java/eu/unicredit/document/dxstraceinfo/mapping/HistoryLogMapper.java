@@ -15,7 +15,9 @@ public class HistoryLogMapper
 
     row.setField(
         0,
-        historyLog.getHistoryLogId()
+        AvroRowDataConverters.string(
+            historyLog.getHistoryLogId()
+        )
     );
 
     row.setField(

@@ -1,0 +1,104 @@
+{
+  "uuid": "db5c8237-7cb7-4bbd-8081-754f52935e83",
+  "eventType": "UPDATE",
+  "eventTimestamp": 1789967131069,
+  "dossierId": 1457671,
+  "applicationCode": "VCB",
+  "selectedProcessType": null,
+  "reprint": "N",
+  "exeApp": "DXS",
+  "correlationKey": "c3f9a539-e658-470f-9384-41106ca3acda",
+  "author": "205317",
+  "status": "CANCELLED",
+  "subStatus": {
+    "string": "null"
+  },
+  "branch": "00200",
+  "paperReason": null,
+  "practiceId": null,
+  "pecFlow": null,
+  "bankCode": "02008",
+  "relatedDossier": null,
+  "masterDossierId": {
+    "string": "2000395776"
+  },
+  "motivation": null,
+  "dossierType": "UCX",
+  "referenceBranchPec": null,
+  "legalEntity": null,
+  "flowType": null,
+  "creationDate": 1784731952238,
+  "endDate": 1789967131026,
+  "customers": [
+    {
+      "ndg": "0000000002640357",
+      "type": "PG",
+      "selectedChannels": "0"
+    }
+  ],
+  "documentGroups": [
+    {
+      "id": 509239,
+      "digilayerId": null,
+      "envelopeId": null,
+      "status": "TO_BE_UPLOADED",
+      "creationDate": 1784731952243,
+      "endDate": 1784731953351,
+      "signers": [
+        {
+          "id": 583282,
+          "ndg": "0000000000205317",
+          "mfaMethod": null,
+          "authenticationId": null,
+          "signerReb": null,
+          "signatureChannel": {
+            "string": "0"
+          },
+          "signatureDate": 0
+        }
+      ],
+      "documents": [
+        {
+          "id": 1156289,
+          "code": null,
+          "status": {
+            "string": "CREATED"
+          },
+          "categoryCode": null,
+          "productName": {
+            "string": "PAYMENTS_COLLECTIONS"
+          },
+          "processCode": {
+            "string": "VCB_IT_REQUEST"
+          },
+          "processType": {
+            "string": "UPLOAD"
+          },
+          "size": null,
+          "controlsOutcomePec": null,
+          "signatureTypePec": null,
+          "certificateAuthorityPec": {
+            "string": "INTESA"
+          },
+          "signaturePointTimestampPec": null,
+          "accessibility": null,
+          "archiveLink": null,
+          "numberOfPages": null,
+          "accountNumber": {
+            "string": "00"
+          },
+          "documentDescription": null,
+          "signatureType": {
+            "string": "QES"
+          },
+          "digitalization": null,
+          "datamatrix": null,
+          "signatureBoxOrder": null,
+          "creationDate": 1784731952246,
+          "endDate": 0,
+          "signatureDate": 0
+        }
+      ]
+    }
+  ]
+}

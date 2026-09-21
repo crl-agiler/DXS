@@ -26,7 +26,7 @@ spec:
     fullyQualifiedName: dxs-traceinfo-flink-streaming-wl
     description: Flink Workload for DXS Traceinfo
     kind: workload
-    version: 0.0.40
+    version: 0.0.41
     infrastructureTemplateId: urn:dmb:itm:dataproc-specific-provisioner:1.0.0
     useCaseTemplateId: urn:dmb:utm:gcp-workload-dataproc-flink-template:0.0.0
     dependsOn:
@@ -41,7 +41,7 @@ spec:
     specific:
       artifact:
         name: dxs-traceinfo-flink-streaming-wl
-        version: 0.0.40
+        version: 0.0.41
       job:
         type: FLINK
         mainClass: eu.unicredit.App
