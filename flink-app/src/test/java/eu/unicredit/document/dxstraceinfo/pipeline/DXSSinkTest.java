@@ -6,6 +6,7 @@ import eu.unicredit.document.dxstraceinfo.context.DiscardOutputTagProperty;
 import eu.unicredit.document.dxstraceinfo.context.SplitContextListProperty;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.util.OutputTag;
@@ -153,7 +154,13 @@ class DXSSinkTest {
                     .thenReturn(flinkBuilder);
 
             DXSSink sink = new DXSSink();
+            DataStream<RowData> tableRowOutput = mock(DataStream.class);
+            when(stream.getSideOutput(splitTag)).thenReturn(tableRowOutput);
 
+            DataStreamSink<RowData> metricsSinkMock = mock(DataStreamSink.class);
+            when(tableRowOutput.addSink(any())).thenReturn(metricsSinkMock);
+            when(metricsSinkMock.name(any())).thenReturn(metricsSinkMock);
+            when(metricsSinkMock.setParallelism(anyInt())).thenReturn(metricsSinkMock);
             sink.sink(stream, context);
 
             verify(stream)
