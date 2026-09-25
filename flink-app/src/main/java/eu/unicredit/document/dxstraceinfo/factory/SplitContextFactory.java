@@ -91,8 +91,8 @@ public class SplitContextFactory implements Serializable {
             new HistoryLogMapper(),
             historyLog,
             tableLoader.apply(historyLog.getId()),
-            Collections.emptyList(),
-            false
+            List.of("history_log_id"),
+            true
         )
     );
   }

@@ -38,6 +38,10 @@ class MapperIntegrationTest {
             "OK",
             "OK",
             "OK"),
+        Arguments.of("/fixtures/dossier-ok-1.json",
+             "KO",
+             "IN_PROGRESS",
+             "IN_PROGRESS"),
         Arguments.of(
             "/fixtures/dossier-ko.json",
             "KO",

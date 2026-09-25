@@ -113,7 +113,7 @@ public final class IcebergTestSchemas {
     public static Schema historyLog() {
 
         return new Schema(
-                Types.NestedField.optional(1, "history_log_id", Types.LongType.get()),
+                Types.NestedField.optional(1, "history_log_id", Types.StringType.get()),
                 Types.NestedField.optional(2, "status", Types.StringType.get()),
                 Types.NestedField.optional(3, "substatus", Types.StringType.get()),
                 Types.NestedField.optional(4, "level_id_identifier", Types.LongType.get()),

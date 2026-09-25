@@ -204,7 +204,7 @@
             {
               "name": "selectedChannels",
               "type": "string",
-              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[0-9]+$\")"
+              "javaAnnotation": "javax.validation.constraints.NotBlank"
             }
           ]
         }
@@ -245,7 +245,7 @@
             {
               "name": "status",
               "type": "string",
-              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DISABLED|LOCKED|READY|PROCESSING_PARTIALLY_SIGNED|TO_BE_ARCHIVED|TO_BE_CONFIRMED|PROCESSING|UPLOADED|TO_BE_PRINTED|PRINTED|CANCELLED|CANCELLED_ARCHIVED|CANCELLED_CREATED|CANCELLED_DRAFT|CANCELLED_LOCKED|CANCELLED_SENT|ARCHIVED|AUTOMATIC_ARCHIVED|CLOSED|EXPIRED|ERROR_SIGNAL|TO_BE_UPLOADED|TO_BE_ACKNOWLEDGED|ARCHIVED_CANCELED|SIGNED|HIDDEN)$\")"
+              "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DRAFT|DISABLED|LOCKED|READY|PROCESSING_PARTIALLY_SIGNED|TO_BE_ARCHIVED|TO_BE_CONFIRMED|PROCESSING|UPLOADED|TO_BE_PRINTED|PRINTED|CANCELLED|CANCELLED_ARCHIVED|CANCELLED_CREATED|CANCELLED_DRAFT|CANCELLED_LOCKED|CANCELLED_SENT|ARCHIVED|AUTOMATIC_ARCHIVED|CLOSED|EXPIRED|ERROR_SIGNAL|TO_BE_UPLOADED|TO_BE_ACKNOWLEDGED|ARCHIVED_CANCELED|SIGNED|HIDDEN)$\")"
             },
             {
               "name": "creationDate",
@@ -347,7 +347,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Z][A-Z0-9_]*$\")"
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^[A-Za-z][A-Za-z0-9_]*$\")"
                     },
                     {
                       "name": "status",
@@ -356,7 +356,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVED_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED)$\")"
+                      "javaAnnotation": "javax.validation.constraints.Pattern(regexp = \"^(CREATED|DOC_GENERATED|PRINTED|ARCHIVED|ARCHIVE_SKIPPED|IN_ARCHIVING|TO_BE_ARCHIVED|BO_APPROVAL|RM_APPROVAL|CONTROLS_FAILED|CANCELLED|CONFIRMED|REJECTED|UPLOADED|UPLOAD_SKIPPED)$\")"
                     },
                     {
                       "name": "categoryCode",
@@ -392,7 +392,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(UPLOAD|SIGN|PAPER|PEC|ARCHIVE)?$\")"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^(ARCHIVE|PAPER|PEC|SIGN|UPLOAD)?$\")"
                     },
                     {
                       "name": "size",
@@ -410,7 +410,7 @@
                         "string"
                       ],
                       "default": null,
-                      "javaAnnotation": "javax.annotation.Nullable"
+                      "javaAnnotation": "javax.annotation.Nullable\n  @javax.validation.constraints.Pattern(regexp = \"^[^|]+\\\\|\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}(?:\\\\.\\\\d{1,9})?(?:Z|[+-]\\\\d{2}:\\\\d{2})\\\\|[^|]+\\\\|[^|]+$\")"
                     },
                     {
                       "name": "signatureTypePec",
