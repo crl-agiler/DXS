@@ -28,11 +28,10 @@ public class IcebergCommitMetricsReporter extends RichSinkFunction<RowData> impl
   public void open(Configuration parameters) throws Exception {
     super.open(parameters);
     tableLoader.open();
-    MetricGroup group = getRuntimeContext().getMetricGroup().addGroup("iceberg").addGroup("table_name",tableName);
+    MetricGroup group = getRuntimeContext().getMetricGroup().addGroup("iceberg");
     rowsWritten = group.counter("rows_written");
     filesWritten = group.counter("files_written");
     bytesWritten = group.counter("bytes_written");
-
     group.gauge("last_commit_duration_ms", () -> lastCommitDurationMs);
 
   }
@@ -46,7 +45,7 @@ public class IcebergCommitMetricsReporter extends RichSinkFunction<RowData> impl
 
     if (snapshot != null){
       Map<String,String> summary = snapshot.summary();
-      rowsWritten.inc(Long.parseLong(summary.getOrDefault("added-recors","0")));
+      rowsWritten.inc(Long.parseLong(summary.getOrDefault("added-records","0")));
       filesWritten.inc(Long.parseLong(summary.getOrDefault("added-data-files","0")));
       bytesWritten.inc(Long.parseLong(summary.getOrDefault("added-files-size","0")));
 
