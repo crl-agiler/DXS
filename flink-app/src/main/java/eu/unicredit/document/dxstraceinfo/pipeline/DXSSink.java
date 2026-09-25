@@ -5,6 +5,7 @@ import eu.unicredit.document.dxstraceinfo.api.Sink;
 import eu.unicredit.document.dxstraceinfo.context.CatalogLoaderProperty;
 import eu.unicredit.document.dxstraceinfo.context.DiscardOutputTagProperty;
 import eu.unicredit.document.dxstraceinfo.context.SplitContextListProperty;
+import eu.unicredit.document.dxstraceinfo.metrics.IcebergCommitMetricsReporter;
 import eu.unicredit.document.dxstraceinfo.transform.SplitContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,12 @@ public class DXSSink implements Sink<RowData> {
             flinkSinkBuilder.writeParallelism(dxsContext.config().getFlinkConfig().getBaseParallelism())
                     .uidPrefix(context.getOutputTag().getId())
                     .append();
+            tableRowOutput
+                .addSink(new IcebergCommitMetricsReporter(
+                    context.getTableLoader(),
+                    context.getOutputTag().getId()))
+                .name("iceberg-metrics-reporter-" + context.getOutputTag().getId())
+                .setParallelism(1);
         }
         configureDiscardSink(
                 discardTag,
