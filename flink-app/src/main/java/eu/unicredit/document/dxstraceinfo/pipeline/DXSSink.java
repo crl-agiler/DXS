@@ -49,6 +49,7 @@ public class DXSSink implements Sink<RowData> {
                     context.getTableLoader(),
                     context.getOutputTag().getId()))
                 .name("iceberg-metrics-reporter-" + context.getOutputTag().getId())
+                .uid("iceberg-metrics-"+ context.getOutputTag().getId())
                 .setParallelism(1);
         }
         configureDiscardSink(
@@ -78,6 +79,7 @@ public class DXSSink implements Sink<RowData> {
                 .tableLoader(
                         discardTableLoader)
                 .upsert(false)
+                .uidPrefix("dxs-traceinfo-discard-log")
                 .append();
     }
 }
