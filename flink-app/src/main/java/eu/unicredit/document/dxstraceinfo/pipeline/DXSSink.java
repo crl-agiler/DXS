@@ -45,12 +45,12 @@ public class DXSSink implements Sink<RowData> {
                     .uidPrefix(context.getOutputTag().getId())
                     .append();
             tableRowOutput
-                .addSink(new IcebergCommitMetricsReporter(
-                    context.getTableLoader(),
-                    context.getOutputTag().getId()))
-                .name("iceberg-metrics-reporter-" + context.getOutputTag().getId())
-                .uid("iceberg-metrics-"+ context.getOutputTag().getId())
-                .setParallelism(1);
+                    .addSink(new IcebergCommitMetricsReporter(
+                            context.getTableLoader(),
+                            context.getOutputTag().getId()))
+                    .name("iceberg-metrics-reporter-" + context.getOutputTag().getId())
+                    .uid("iceberg-metrics-" + context.getOutputTag().getId())
+                    .setParallelism(1);
         }
         configureDiscardSink(
                 discardTag,
@@ -79,7 +79,7 @@ public class DXSSink implements Sink<RowData> {
                 .tableLoader(
                         discardTableLoader)
                 .upsert(false)
-                .uidPrefix("dxs-traceinfo-discard-log")
+                .uidPrefix(discardTag.getId())
                 .append();
     }
 }

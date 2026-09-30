@@ -119,6 +119,21 @@ class DXSSinkTest {
         when(stream.getSideOutput(discardTag))
                 .thenReturn(discardOutput);
 
+        DataStreamSink<RowData> metricsSink =
+                mock(DataStreamSink.class);
+
+        when(sideOutput.addSink(any()))
+                .thenReturn(metricsSink);
+
+        when(metricsSink.name(anyString()))
+                .thenReturn(metricsSink);
+
+        when(metricsSink.uid(anyString()))
+                .thenReturn(metricsSink);
+
+        when(metricsSink.setParallelism(anyInt()))
+                .thenReturn(metricsSink);
+
         try (MockedStatic<FlinkSink> flinkSink =
                      mockStatic(FlinkSink.class);
 
@@ -154,13 +169,7 @@ class DXSSinkTest {
                     .thenReturn(flinkBuilder);
 
             DXSSink sink = new DXSSink();
-            DataStream<RowData> tableRowOutput = mock(DataStream.class);
-            when(stream.getSideOutput(splitTag)).thenReturn(tableRowOutput);
 
-            DataStreamSink<RowData> metricsSinkMock = mock(DataStreamSink.class);
-            when(tableRowOutput.addSink(any())).thenReturn(metricsSinkMock);
-            when(metricsSinkMock.name(any())).thenReturn(metricsSinkMock);
-            when(metricsSinkMock.setParallelism(anyInt())).thenReturn(metricsSinkMock);
             sink.sink(stream, context);
 
             verify(stream)
@@ -171,6 +180,12 @@ class DXSSinkTest {
 
             verify(flinkBuilder, atLeastOnce())
                     .append();
+
+            verify(sideOutput)
+                    .addSink(any());
+
+            verify(metricsSink)
+                    .uid("iceberg-metrics-" + splitTag.getId());
         }
     }
 
