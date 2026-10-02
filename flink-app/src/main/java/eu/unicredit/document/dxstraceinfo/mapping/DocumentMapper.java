@@ -7,6 +7,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
 
+import java.time.Instant;
+
 public class DocumentMapper
     implements MapFunction<Tuple2<DocumentGroup, Document>, RowData> {
 
@@ -145,17 +147,22 @@ public class DocumentMapper
 
     // 18 - document_last_signature_timestamp
     row.setField(
-        18,
-        AvroRowDataConverters.timestamp(
-            document.getSignatureDate())
+            18,
+            AvroRowDataConverters.timestamp(
+                    isSentinelEpoch(document.getSignatureDate())
+                            ? null
+                            : document.getSignatureDate())
     );
 
     // 19 - document_end_timestamp
     row.setField(
-        19,
-        AvroRowDataConverters.timestamp(
-            document.getEndDate())
+            19,
+            AvroRowDataConverters.timestamp(
+                    isSentinelEpoch(document.getEndDate())
+                            ? null
+                            : document.getEndDate())
     );
+
 
     // 20 - document_controls_outcome_pec
     row.setField(
@@ -207,6 +214,11 @@ public class DocumentMapper
     );
 
     return row;
+  }
+
+
+  private boolean isSentinelEpoch(Instant instant) {
+    return instant != null && instant.toEpochMilli() == 0L;
   }
 
   private String outcomeFromStatus(String status) {

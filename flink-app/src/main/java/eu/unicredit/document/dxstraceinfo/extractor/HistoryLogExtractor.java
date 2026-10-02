@@ -9,51 +9,72 @@ import org.apache.flink.api.common.functions.MapFunction;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Builds history-log records for a dossier event
+ */
 public class HistoryLogExtractor
-    implements MapFunction<DossierTraceinfoEvent, List<HistoryLogRecord>> {
+        implements MapFunction<DossierTraceinfoEvent, List<HistoryLogRecord>> {
+
+  private static final String KEY_SEPARATOR = "-";
 
   @Override
   public List<HistoryLogRecord> map(DossierTraceinfoEvent event) {
 
     List<HistoryLogRecord> records = new ArrayList<>();
+
+    long dossierId = event.getDossierId();
+
     records.add(
-        new HistoryLogRecord(
-            String.valueOf(event.getDossierId()),
-            event.getDossierId(),
-            event.getStatus(),
-            event.getSubStatus(),
-            event.getCreationDate(),
-            "DOSSIER"
-        )
+            new HistoryLogRecord(
+                    dossierHistoryLogId(dossierId),
+                    dossierId,
+                    event.getStatus(),
+                    event.getSubStatus(),
+                    event.getCreationDate(),
+                    "DOSSIER"
+            )
     );
+
     for (DocumentGroup group : event.getDocumentGroups()) {
 
       records.add(
-          new HistoryLogRecord(
-                  event.getDossierId() + "-" + group.getId(),
-              group.getId(),
-              group.getStatus(),
-              null,
-              group.getCreationDate(),
-              "DOCUMENTS_GROUP"
-          )
+              new HistoryLogRecord(
+                      documentsGroupHistoryLogId(dossierId, group.getId()),
+                      group.getId(),
+                      group.getStatus(),
+                      null,
+                      group.getCreationDate(),
+                      "DOCUMENTS_GROUP"
+              )
       );
 
       for (Document document : group.getDocuments()) {
 
         records.add(
-            new HistoryLogRecord(
-                    event.getDossierId() + "-" + document.getId(),
-                document.getId(),
-                document.getStatus(),
-                null,
-                document.getCreationDate(),
-                "DOCUMENT"
-            )
+                new HistoryLogRecord(
+                        documentHistoryLogId(dossierId, document.getId()),
+                        document.getId(),
+                        document.getStatus(),
+                        null,
+                        document.getCreationDate(),
+                        "DOCUMENT"
+                )
         );
       }
     }
 
     return records;
+  }
+
+  private String dossierHistoryLogId(long dossierId) {
+    return String.valueOf(dossierId);
+  }
+
+  private String documentsGroupHistoryLogId(long dossierId, long documentsGroupId) {
+    return dossierId + KEY_SEPARATOR + documentsGroupId;
+  }
+
+  private String documentHistoryLogId(long dossierId, long documentId) {
+    return dossierId + KEY_SEPARATOR + documentId;
   }
 }
