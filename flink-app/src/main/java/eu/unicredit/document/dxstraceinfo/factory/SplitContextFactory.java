@@ -92,7 +92,7 @@ public class SplitContextFactory implements Serializable {
             historyLog,
             tableLoader.apply(historyLog.getId()),
             List.of("history_log_id"),
-            true
+            false
         )
     );
   }
