@@ -9,9 +9,6 @@ import org.apache.flink.api.common.functions.MapFunction;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Builds history-log records for a dossier event
- */
 public class HistoryLogExtractor
         implements MapFunction<DossierTraceinfoEvent, List<HistoryLogRecord>> {
 
@@ -21,48 +18,26 @@ public class HistoryLogExtractor
   public List<HistoryLogRecord> map(DossierTraceinfoEvent event) {
 
     List<HistoryLogRecord> records = new ArrayList<>();
-
     long dossierId = event.getDossierId();
 
-    records.add(
-            new HistoryLogRecord(
-                    dossierHistoryLogId(dossierId),
-                    dossierId,
-                    event.getStatus(),
-                    event.getSubStatus(),
-                    event.getCreationDate(),
-                    "DOSSIER"
-            )
-    );
+    records.add(new HistoryLogRecord(
+            dossierHistoryLogId(dossierId), dossierId,
+            event.getStatus(), event.getSubStatus(),
+            event.getEventTimestamp(), "DOSSIER"));
 
     for (DocumentGroup group : event.getDocumentGroups()) {
-
-      records.add(
-              new HistoryLogRecord(
-                      documentsGroupHistoryLogId(dossierId, group.getId()),
-                      group.getId(),
-                      group.getStatus(),
-                      null,
-                      group.getCreationDate(),
-                      "DOCUMENTS_GROUP"
-              )
-      );
+      records.add(new HistoryLogRecord(
+              documentsGroupHistoryLogId(dossierId, group.getId()), group.getId(),
+              group.getStatus(), null,
+              event.getEventTimestamp(), "DOCUMENTS_GROUP"));
 
       for (Document document : group.getDocuments()) {
-
-        records.add(
-                new HistoryLogRecord(
-                        documentHistoryLogId(dossierId, document.getId()),
-                        document.getId(),
-                        document.getStatus(),
-                        null,
-                        document.getCreationDate(),
-                        "DOCUMENT"
-                )
-        );
+        records.add(new HistoryLogRecord(
+                documentHistoryLogId(dossierId, document.getId()), document.getId(),
+                document.getStatus(), null,
+                event.getEventTimestamp(), "DOCUMENT"));
       }
     }
-
     return records;
   }
 

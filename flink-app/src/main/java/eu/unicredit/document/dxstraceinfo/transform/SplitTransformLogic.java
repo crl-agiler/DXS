@@ -27,7 +27,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import eu.unicredit.document.dxstraceinfo.model.ChangeDetectable;
+import org.apache.flink.api.common.state.MapState;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.time.Time;
+import org.apache.flink.api.common.typeinfo.Types;
 /**
  * Validates and transforms dossier trace-info events.
  *
@@ -50,7 +55,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
 
   private transient ValidatorFactory validatorFactory;
   private transient Validator validator;
-
+  private transient MapState<String, String> lastStatusState;
   /**
    * Creates the transformation function.
    *
@@ -88,6 +93,14 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
 
     validator =
         validatorFactory.getValidator();
+    MapStateDescriptor<String, String> descriptor =
+            new MapStateDescriptor<>("history-last-status", Types.STRING, Types.STRING);
+    descriptor.enableTimeToLive(
+            StateTtlConfig.newBuilder(Time.days(90))
+                    .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
+                    .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
+                    .build());
+    lastStatusState = getRuntimeContext().getMapState(descriptor);
   }
 
   /**
@@ -171,10 +184,23 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
     TimestampData eventTimestamp = AvroRowDataConverters.timestamp(event.getEventTimestamp());
     TimestampData processingTimestamp = AvroRowDataConverters.timestamp(Instant.now());
     for (T object : objects) {
+      if (object instanceof ChangeDetectable && !hasChanged((ChangeDetectable) object)) {
+        continue;
+      }
       GenericRowData basicRowData = (GenericRowData) mapper.map(object);
       GenericRowData map = enrichRowData(basicRowData, eventTimestamp, processingTimestamp);
       context.output(outputTag, map);
     }
+  }
+
+  private boolean hasChanged(ChangeDetectable detectable) throws Exception {
+    String key = detectable.changeKey();
+    String current = detectable.changeValue();
+    if (current.equals(lastStatusState.get(key))) {
+      return false;
+    }
+    lastStatusState.put(key, current);
+    return true;
   }
 
 

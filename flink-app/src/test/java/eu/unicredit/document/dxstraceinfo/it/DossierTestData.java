@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class DossierTestData {
 
@@ -176,11 +178,7 @@ public final class DossierTestData {
      * Adjust this formula if the production history extractor uses
      * a different cardinality.
      */
-    long historyLogCount =
-        dossierCount +
-            documentGroupCount +
-            documentCount;
-
+    long historyLogCount = countHistoryLogRows(validEvents);
     return new ExpectedRecordCounts(
         dossierCount,
         documentGroupCount,
@@ -189,7 +187,43 @@ public final class DossierTestData {
         historyLogCount,
         invalidEvents.size());
   }
+  /**
+   * Mirrors the production filter: a history row is written only when the status of the
+   * entity differs from the last one seen for that entity (state is per dossier).
+   */
+  private static long countHistoryLogRows(List<DossierTraceinfoEvent> events) {
+    Map<String, String> lastStatus = new HashMap<>();
+    long rows = 0;
 
+    for (DossierTraceinfoEvent event : events) {
+      long dossierId = event.getDossierId();
+
+      rows += trackChange(lastStatus, dossierId + "|DOSSIER|" + dossierId, event.getStatus());
+
+      if (event.getDocumentGroups() == null) {
+        continue;
+      }
+      for (var group : event.getDocumentGroups()) {
+        rows += trackChange(
+                lastStatus, dossierId + "|DOCUMENTS_GROUP|" + group.getId(), group.getStatus());
+
+        if (group.getDocuments() == null) {
+          continue;
+        }
+        for (var document : group.getDocuments()) {
+          rows += trackChange(
+                  lastStatus, dossierId + "|DOCUMENT|" + document.getId(), document.getStatus());
+        }
+      }
+    }
+    return rows;
+  }
+
+  private static long trackChange(Map<String, String> lastStatus, String key, Object status) {
+    String current = String.valueOf(status);
+    String previous = lastStatus.put(key, current);
+    return current.equals(previous) ? 0 : 1;
+  }
   private static String formatViolations(
       Set<? extends ConstraintViolation<?>> violations) {
 

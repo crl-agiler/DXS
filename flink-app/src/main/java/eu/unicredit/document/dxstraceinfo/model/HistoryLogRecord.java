@@ -10,11 +10,21 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryLogRecord implements Serializable {
+public class HistoryLogRecord implements Serializable, ChangeDetectable {
   private String historyLogId;
   private Long levelIdIdentifier;
   private String status;
   private String subStatus;
   private Instant statusTimestamp;
   private String level;
+
+  @Override
+  public String changeKey() {
+    return level + "|" + levelIdIdentifier;
+  }
+
+  @Override
+  public String changeValue() {
+    return status;
+  }
 }
