@@ -55,8 +55,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
 
   private transient ValidatorFactory validatorFactory;
   private transient Validator validator;
-  private transient MapState<String, String> lastStatusState;
-  /**
+  private transient StatusChangeFilter statusChangeFilter;  /**
    * Creates the transformation function.
    *
    * @param splitContexts contexts used to extract, map, and emit business records
@@ -100,7 +99,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
                     .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
                     .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
                     .build());
-    lastStatusState = getRuntimeContext().getMapState(descriptor);
+    statusChangeFilter = new StatusChangeFilter(getRuntimeContext().getMapState(descriptor));
   }
 
   /**
@@ -184,7 +183,8 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
     TimestampData eventTimestamp = AvroRowDataConverters.timestamp(event.getEventTimestamp());
     TimestampData processingTimestamp = AvroRowDataConverters.timestamp(Instant.now());
     for (T object : objects) {
-      if (object instanceof ChangeDetectable && !hasChanged((ChangeDetectable) object)) {
+      if (object instanceof ChangeDetectable
+              && !statusChangeFilter.hasChanged((ChangeDetectable) object)) {
         continue;
       }
       GenericRowData basicRowData = (GenericRowData) mapper.map(object);
