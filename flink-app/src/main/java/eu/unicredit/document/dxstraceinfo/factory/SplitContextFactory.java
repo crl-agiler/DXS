@@ -86,14 +86,14 @@ public class SplitContextFactory implements Serializable {
             List.of("signer_id")
         ),
 
-        SplitContext.of(
-            new HistoryLogExtractor(),
-            new HistoryLogMapper(),
-            historyLog,
-            tableLoader.apply(historyLog.getId()),
-            List.of("history_log_id"),
-            false
-        )
+            SplitContext.of(
+                    new HistoryLogExtractor(),
+                    new HistoryLogMapper(),
+                    historyLog,
+                    tableLoader.apply(historyLog.getId()),
+                    List.of("history_log_id", "level", "level_id_identifier", "status", "event_timestamp"),
+                    true)
+
     );
   }
 

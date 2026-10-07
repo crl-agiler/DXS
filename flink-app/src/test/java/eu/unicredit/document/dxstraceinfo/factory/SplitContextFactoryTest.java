@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.Serializable;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -138,8 +139,9 @@ class SplitContextFactoryTest {
         context.getMapper());
 
     assertEquals(
-            List.of("history_log_id"),
-        context.getEqualityField());
+            List.of("history_log_id", "level", "level_id_identifier", "status", "event_timestamp"),
+            context.getEqualityField());
+    assertTrue(context.isUpsert());
 
     assertNotNull(
         context.getTableLoader());

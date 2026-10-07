@@ -28,11 +28,18 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import eu.unicredit.document.dxstraceinfo.model.ChangeDetectable;
-import org.apache.flink.api.common.state.MapState;
+
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.Types;
+import eu.unicredit.document.dxstraceinfo.model.StatusTracked;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.state.StateTtlConfig;
+import org.apache.flink.api.common.time.Time;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.common.typeinfo.Types;
+import java.util.Optional;
 /**
  * Validates and transforms dossier trace-info events.
  *
@@ -52,7 +59,7 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
 
   private final List<SplitContext<?>> splitContexts;
   private final ErrorHandler<DossierTraceinfoEvent> errorHandler;
-
+  private transient StatusRunTracker statusRunTracker;
   private transient ValidatorFactory validatorFactory;
   private transient Validator validator;
   private transient StatusChangeFilter statusChangeFilter;  /**
@@ -92,14 +99,15 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
 
     validator =
         validatorFactory.getValidator();
-    MapStateDescriptor<String, String> descriptor =
-            new MapStateDescriptor<>("history-last-status", Types.STRING, Types.STRING);
+    MapStateDescriptor<String, StatusRun> descriptor =
+            new MapStateDescriptor<>(
+                    "history-status-runs", Types.STRING, TypeInformation.of(StatusRun.class));
     descriptor.enableTimeToLive(
             StateTtlConfig.newBuilder(Time.days(90))
                     .setUpdateType(StateTtlConfig.UpdateType.OnCreateAndWrite)
                     .setStateVisibility(StateTtlConfig.StateVisibility.NeverReturnExpired)
                     .build());
-    statusChangeFilter = new StatusChangeFilter(getRuntimeContext().getMapState(descriptor));
+    statusRunTracker = new StatusRunTracker(getRuntimeContext().getMapState(descriptor));
   }
 
   /**
@@ -183,12 +191,18 @@ public class SplitTransformLogic extends KeyedProcessFunction<Long, DossierTrace
     TimestampData eventTimestamp = AvroRowDataConverters.timestamp(event.getEventTimestamp());
     TimestampData processingTimestamp = AvroRowDataConverters.timestamp(Instant.now());
     for (T object : objects) {
-      if (object instanceof ChangeDetectable
-              && !statusChangeFilter.hasChanged((ChangeDetectable) object)) {
-        continue;
+      TimestampData rowEventTimestamp = eventTimestamp;
+
+      if (object instanceof StatusTracked) {
+        Optional<Instant> runStart = statusRunTracker.track((StatusTracked) object);
+        if (!runStart.isPresent()) {
+          continue;
+        }
+        rowEventTimestamp = AvroRowDataConverters.timestamp(runStart.get());
       }
+
       GenericRowData basicRowData = (GenericRowData) mapper.map(object);
-      GenericRowData map = enrichRowData(basicRowData, eventTimestamp, processingTimestamp);
+      GenericRowData map = enrichRowData(basicRowData, rowEventTimestamp, processingTimestamp);
       context.output(outputTag, map);
     }
   }

@@ -10,7 +10,7 @@ import java.time.Instant;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HistoryLogRecord implements Serializable, ChangeDetectable {
+public class HistoryLogRecord implements Serializable, StatusTracked {
   private String historyLogId;
   private Long levelIdIdentifier;
   private String status;
@@ -19,12 +19,17 @@ public class HistoryLogRecord implements Serializable, ChangeDetectable {
   private String level;
 
   @Override
-  public String changeKey() {
-    return level + "|" + levelIdIdentifier;
+  public String trackKey() {
+    return level + "|" + levelIdIdentifier;   // level avoids collisions between group and document ids
   }
 
   @Override
-  public String changeValue() {
+  public String trackStatus() {
     return status;
+  }
+
+  @Override
+  public Instant trackTimestamp() {
+    return statusTimestamp;
   }
 }
